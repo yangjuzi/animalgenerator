@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>animal generator</title>
+	<meta name="description" content="Discover nature's diversity with one click using our Random Animal Picture Generator.">
+	<link href="https://seo.box/static/css/tailwind.3.4.1.js" rel="stylesheet">
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<link rel="canonical" href="https://animalgenerator.co/"/>
+	<style type="text/css">
+		.links .grid,.links .link{
+			border: solid 1px #cbcbc8;
+			background-color: #fbfbfb;
+		}
+		h1 a{color: #f05011;}
+		.quick-links .mx-auto{
+			background-color: #fbfbfb;
+			border-radius: 8px;
+			overflow: hidden;
+		}
+	</style>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://seo.box/static/css/tailwind.3.4.1.js"></script>
+    <style>
+        #pics {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+		
+        #pics .image-container {
+            text-align: center;
+            #flex-basis: calc(33.333% - 10px); /* 两列布局，减去间隔 */
+			flex-basis: calc(33.333% - 10px); /* 三张图片并排，减去间隔 */
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+			border-radius: 10px; /* 设置圆角半径 */
+			overflow: hidden; /* 确保圆角效果不被内部元素覆盖 */
+			position: relative;
+            width: 300px; /* 固定宽度 */
+            height: 300px; /* 固定高度 */
+            overflow: hidden;
+            margin: 10px;
+            display: inline-block;
+        }
+        #pics img {
+            
+            margin-bottom: 5px;
+			border-radius: 10px; /* 设置圆角半径，与容器一致 */
+			position: absolute;
+            top: 50%;
+            left: 50%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+
+        }
+        .animal-name {
+            text-align: center;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<h1 class="m-5 text-center text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">Welcome To Random Animal Generator.</h1>
+        <h2 class="mx-auto mb-6 text-center text-sm text-[#636262] sm:px-8 sm:text-xl md:px-24 lg:mb-8">Discover nature's diversity with one click using our Random Animal Picture Generator</h2>
+
+
+ 
+        <!-- Hero Button -->
+        <div class="mx-auto flex w-36 flex-col justify-center gap-x-5 gap-y-5 sm:w-full sm:flex-row sm:items-start">
+          <button id="loadPics" href="#" class="inline-block items-center rounded-md border border-solid border-black bg-black px-6 py-3 text-center font-semibold text-white">random</button>
+          <a href="#" class="flex items-center gap-2 rounded-md border border-solid border-black bg-white px-6 py-3 text-center font-semibold text-black">
+            <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/64aa5ac1b81f4f0a9b8f0986_play-icon.svg" alt="" class="inline-block h-4 w-4" />
+            <p>Share</p>
+          </a>
+        </div>
+    <div id="pics"></div>
+
+    <script>
+        var animalImages = [
+         'animal/gorilla.webp-gorilla',
+            'animal/rabbit.webp-rabbit',
+            'animal/markhor.webp-markhor',
+			'animal/sealion.webp-sealion',
+			'animal/polarbear.webp-polarbear',
+			'animal/fish_carp.webp-fish_carp',
+			'animal/birds_jackdaw.webp-birds_jackdaw',
+			'animal/civet.webp-civet',
+			'animal/tiger.webp-tiger',
+			'animal/arthropods_herculesbeetle.webp-arthropods_herculesbeetle',
+            // ... 添加更多图片和名称的组合
+        ];
+		
+        $(document).ready(function() {            loadRandomImages(); // 页面加载完成时加载图片        
+		});        
+		
+		 $(document).ready(function() {            $('#loadPics').click(function() {
+                loadRandomImages();
+            });
+        });
+        function loadRandomImages() {
+            var randomImages = [];
+            var imagesLength = animalImages.length;
+            for (var i = 0; i < 6; i++) {
+                // 保证每次点击至少有一张新的图片
+                var randomIndex = Math.floor(Math.random() * imagesLength);
+                var randomImage = animalImages[randomIndex];
+                if (randomImages.indexOf(randomImage) === -1) {
+                    randomImages.push(randomImage);
+                } else {
+                    i--; // 如果重复，重新选择
+                }
+            }
+            displayImages(randomImages);
+        }
+
+        function displayImages(images) {
+            var html = '';
+            images.forEach(function(image) {
+                var parts = image.split('-');
+            var fileName = parts[0]; // 图片文件名
+            var animalName = parts[1] || 'Unknown'; // 动物名称
+            html += '<div class="image-container">' +
+                        '<img src="' + fileName + '" alt="' + animalName + '" >';
+            html += '<p class="animal-name">' + animalName + '</p></div>';
+        });
+            $('#pics').html(html);        }    </script></body></html>
+	    
+	   
+    </script>
+</body>
+</html>
