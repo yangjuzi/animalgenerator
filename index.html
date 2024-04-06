@@ -1,110 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>animal generator</title>
-	<meta name="description" content="Discover nature's diversity with one click using our Random Animal Picture Generator.">
-	<link href="https://seo.box/static/css/tailwind.3.4.1.js" rel="stylesheet">
-	<link rel="shortcut icon" href="./favicon.svg" />
-	<link rel="canonical" href="https://animalgenerator.co/"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>animal generator</title>
+    <meta name="description"
+        content="Discover nature's diversity with one click using our Random Animal Picture Generator.">
+
+    <link rel="shortcut icon" href="./icon.png" />
+    <link rel="canonical" href="https://animalgenerator.co/" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="https://seo.box/static/css/tailwind.3.4.1.js"></script>
-   
-	<style type="text/css">
-		.links .grid,.links .link{
-			border: solid 1px #cbcbc8;
-			background-color: #fbfbfb;
-		}
-		h1 a{color: #f05011;}
-		.quick-links .mx-auto{
-			background-color: #fbfbfb;
-			border-radius: 8px;
-			overflow: hidden;
-		}
-	
+    <script src="https://seo.box/static/css/tailwind.3.4.1.js"></script>
+
+    <style type="text/css">
+        .links .grid,
+        .links .link {
+            border: solid 1px #cbcbc8;
+            background-color: #fbfbfb;
+        }
+
+        h1 a {
+            color: #f05011;
+        }
+
+        .quick-links .mx-auto {
+            background-color: #fbfbfb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
         #pics {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: space-around;
             align-items: center;
+            width: 40%;
+            margin: auto;
         }
-		
+
         #pics .image-container {
             text-align: center;
-            #flex-basis: calc(33.333% - 10px); /* 两列布局，减去间隔 */
-			flex-basis: calc(33.333% - 10px); /* 三张图片并排，减去间隔 */
-            margin: 5px;
-            padding: 10px;
+            flex-basis: calc(33.333% - 20px);
+            /* 三张图片并排，减去间隔 */
+            /* margin: 0,0,10px,0;
+            padding: 10px; */
+            margin: 0;
+            padding: 0;
             border: 1px solid #ddd;
             border-radius: 4px;
-			border-radius: 10px; /* 设置圆角半径 */
-			overflow: hidden; /* 确保圆角效果不被内部元素覆盖 */
-			position: relative;
-            width: 300px; /* 固定宽度 */
-            height: 300px; /* 固定高度 */
+            /* 设置圆角半径 */
+            position: relative;
+            min-height: 250px;
+            /* 固定高度 */
             overflow: hidden;
+            /* 确保圆角效果不被内部元素覆盖 */
             margin: 10px;
-            display: inline-block;
-        }
-        #pics img {
-            
-            margin-bottom: 5px;
-			border-radius: 10px; /* 设置圆角半径，与容器一致 */
-			position: absolute;
-            top: 50%;
-            left: 50%;
-            width: auto;
-            height: auto;
-            transform: translate(-50%, -50%);
 
+            display: flex;
+            flex-direction: column;
+            /* 使子元素垂直排列 */
         }
+
+        #pics .animal-image {
+            border-radius: 4px;
+            /* 设置圆角半径，与容器一致 */
+            width: 100%;
+            max-height: 100%;
+            
+            object-fit: cover;
+            /* 保持图片比例并填满容器 cover fill contain*/
+            margin:0;
+            padding: 0;
+            display: block;
+        }
+
         .animal-name {
             text-align: center;
             font-size: 16px;
             color: #333;
+            margin-top: 1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        #sharePanel {
+            position: absolute;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .share-link {
+            display: block;
+            margin-bottom: 5px;
+            text-decoration: none;
+            color: #000;
+        }
+
+        /* 應用自定義懸浮樣式 */
+        #shareButton:hover {
+            cursor: pointer;
+        }
+
+        /* 預設隱藏分享面板 */
+        .hidden {
+            display: none;
         }
     </style>
+    <script defer src="./scripts.js"></script>
 </head>
+
 <body>
 
-<h1 class="m-5 text-center text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">Welcome To Random Animal Generator.</h1>
-        <h2 class="mx-auto mb-6 text-center text-sm text-[#636262] sm:px-8 sm:text-xl md:px-24 lg:mb-8">Discover nature's diversity with one click using our Random Animal Picture Generator</h2>
+    <h1 class="m-5 text-center text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">Welcome To Random Animal
+        Generator</h1>
+    <h2 class="mx-auto mb-6 text-center text-sm text-[#636262] sm:px-8 sm:text-xl md:px-24 lg:mb-8">Discover nature's
+        diversity with one click using our Random Animal Picture Generator</h2>
+
+    <!-- Hero Button -->
+    <div class="mx-auto flex w-36 flex-col justify-center gap-x-5 gap-y-5 sm:w-full sm:flex-row sm:items-start">
+        <button id="loadPics" href="#"
+            class="inline-block items-center rounded-md border border-solid border-black bg-black px-6 py-3 text-center font-semibold text-white">random</button>
+        <a href="#"
+            class="flex items-center gap-2 rounded-md border border-solid border-black bg-white px-6 py-3 text-center font-semibold text-black">
+            <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/64aa5ac1b81f4f0a9b8f0986_play-icon.svg"
+                alt="" class="inline-block h-4 w-4" />
+
+            <button id="shareButton">Share</button>
+        </a>
 
 
- 
-        <!-- Hero Button -->
-        <div class="mx-auto flex w-36 flex-col justify-center gap-x-5 gap-y-5 sm:w-full sm:flex-row sm:items-start">
-          <button id="loadPics" href="#" class="inline-block items-center rounded-md border border-solid border-black bg-black px-6 py-3 text-center font-semibold text-white">random</button>
-          <a href="#" class="flex items-center gap-2 rounded-md border border-solid border-black bg-white px-6 py-3 text-center font-semibold text-black">
-            <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/64aa5ac1b81f4f0a9b8f0986_play-icon.svg" alt="" class="inline-block h-4 w-4" />
-            <p>Share</p>
-          </a>
+
+        <div id="sharePanel" class="hidden">
+            <!-- 添加您想要支持的各個社交媒體分享連結 -->
+            <a href="https://www.facebook.com/" class="share-link" data-platform="facebook">Facebook</a>
+            <a href="https://www.twitter.com/" class="share-link" data-platform="twitter">Twitter</a>
+            <a href="https://www.linkedin.com/" class="share-link" data-platform="linkedin">LinkedIn</a>
+            <!-- 更多平台... -->
         </div>
+    </div>
     <div id="pics"></div>
 
     <script>
         var animalImages = [
-         'animal/gorilla.webp-gorilla',
-            'animal/rabbit.webp-rabbit',
-            'animal/markhor.webp-markhor',
-			'animal/sealion.webp-sealion',
-			'animal/polarbear.webp-polarbear',
-			'animal/fish_carp.webp-fish_carp',
-			'animal/birds_jackdaw.webp-birds_jackdaw',
-			'animal/civet.webp-civet',
-			'animal/tiger.webp-tiger',
-			'animal/arthropods_herculesbeetle.webp-arthropods_herculesbeetle',
+            'aardvark',
+            'addax',
+            'alligator',
+            'alpaca',
+            'antelope',
+            'aoudad',
+            'armadillo',
+            'arthropods_herculesbeetle',
+            'baboon',
+            'bald_eagle',
+            'bat',
+            'bear',
+            'beaver',
+            'bighorn',
+            'birds_jackdaw',
+            'bison',
+            'blue_crab',
+            'boar',
+            'buffalo',
+            'bull',
+            'bumble_bee',
+            'burro',
+            'canary',
+            'cat',
+            'cheetah',
+            'chimpanzee',
+            'civet',
+            'cougar',
+            'cow',
+            'coyote',
+            'crocodile',
+            'deer',
+            'doe',
+            'donkey',
+            'dormouse',
+            'dromedary',
+            'duckbill_platypus',
+            'dugong',
+            'dung_beetle',
+            'eagle_owl',
+            'eland',
+            'ewe',
+            'fawn',
+            'ferret',
+            'fish',
+            'fish_carp',
+            'fox',
+            'gemsbok',
+            'gila_monster',
+            'giraffe',
+            'gnu',
+            'gopher',
+            'gorilla',
+            'guanaco',
+            'guinea_pig',
+            'hamster',
+            'hare',
+            'hartebeest',
+            'hedgehog',
+            'highland_cow',
+            'hippopotamus',
+            'hog',
+            'horse',
+            'iguana',
+            'impala',
+            'jackal',
+            'jaguar',
+            'kangaroo',
+            'kitten',
+            'koala',
+            'lamb',
+            'lemur',
+            'leopard',
+            'lion',
+            'lizard',
+            'llama',
+            'lovebird',
+            'mandrill',
+            'mare',
+            'markhor',
+            'marmoset',
+            'meerkat',
+            'mink',
+            'monkey',
+            'moose',
+            'mountain_goat',
+            'mule',
+            'musk_deer',
+            'musk_ox',
+            'mustang',
+            'mynah_bird',
+            'orangutan',
+            'ox',
+            'panda',
+            'panther',
+            'parakeet',
+            'parrot',
+            'peccary',
+            'pig',
+            'polarbear',
+            'polar_bear',
+            'pony',
+            'prairie_dog',
+            'pronghorn',
+            'puppy',
+            'rabbit',
+            'ram',
+            'rat',
+            'reindeer',
+            'salamander',
+            'seal',
+            'sealion',
+            'silver_fox',
+            'skunk',
+            'sloth',
+            'starfish',
+            'steer',
+            'tapir',
+            'thorny_devil',
+            'tiger',
+            'turtle',
+            'vicuna',
+            'walrus',
+            'warthog',
+            'waterbuck',
+            'weasel',
+            'whale',
+            'wildcat',
+            'wolf',
+            'wolverine',
+            'wombat',
+            'woodchuck',
+            'yak'
+
+            //'animal/arthropods_herculesbeetle.webp-arthropods_herculesbeetle',
             // ... 添加更多图片和名称的组合
         ];
-		
-        $(document).ready(function() {            loadRandomImages(); // 页面加载完成时加载图片        
-		});        
-		
-		 $(document).ready(function() {            $('#loadPics').click(function() {
-                loadRandomImages();
-            });
+
+        $(document).ready(function () {
+            loadRandomImages(); // 页面加载完成时加载图片
         });
+
+        $('#loadPics').click(function () {
+            loadRandomImages();
+        });
+
         function loadRandomImages() {
             var randomImages = [];
             var imagesLength = animalImages.length;
@@ -123,28 +311,70 @@
 
         function displayImages(images) {
             var html = '';
-            images.forEach(function(image) {
-                var parts = image.split('-');
-            var fileName = parts[0]; // 图片文件名
-            var animalName = parts[1] || 'Unknown'; // 动物名称
-            html += '<div class="image-container">' +
-                        '<img src="' + fileName + '" alt="' + animalName + '" >';
-            html += '<p class="animal-name">' + animalName + '</p></div>';
-        });
-            $('#pics').html(html);        }    </script></body></html>
-	    
-	   
+            images.forEach(function (image) {
+                //animal/sealion.webp
+                // var parts = image.split('-');
+                //var fileName = parts[0]; // 图片文件名
+                //var animalName = parts[1] || 'Unknown'; // 动物名称
+                var animalName = image //動物名稱
+                var fileName = 'animal//' + image + '.webp' // 图片文件名
+                console.log(fileName)
+                html += '<div class="image-container">' +
+                    '<div class="animal-image">' +
+                    '<img src="' + fileName + '" alt="' + animalName + '">' +
+                    '</div>' +
+                    '<div class="animal-name">' + animalName + '</div>' +
+                    '</div>';
+            });
+            $('#pics').html(html);
+        }
     </script>
+<footer class="block">
+    <!-- Container -->
+    <div class="py-16 md:py-24 lg:py-32 mx-auto w-full max-w-7xl px-5 md:px-10"><!-- Component -->
+      <div class="flex-col flex items-center">
+        <a href="#" class="mb-8 inline-block max-w-full text-black">
+          <img src="./icon.png" alt="animalgenerator" class="inline-block max-h-10">
+        </a>
+        <div class="text-center font-semibold max-[991px]: max-[991px]:py-1">
+          <a href="#" class="inline-block px-6 py-2 font-normal text-black transition hover:text-[#d6a701]">About</a>
+          <a href="#" class="inline-block px-6 py-2 font-normal text-black transition hover:text-[#d6a701]">Features</a>
+          <a href="#" class="inline-block px-6 py-2 font-normal text-black transition hover:text-[#d6a701]">Works</a>
+          <a href="#" class="inline-block px-6 py-2 font-normal text-black transition hover:text-[#d6a701]">Support</a>
+          <a href="#" class="inline-block px-6 py-2 font-normal text-black transition hover:text-[#d6a701]">Help</a>
+        </div>
+        <div class="mb-8 mt-8 [border-bottom:1px_solid_rgb(0,_0,_0)] w-48">
+        </div>
+        <div class="mb-12 grid-cols-4 grid-flow-col grid w-full max-w-[208px] gap-3">
+          <a href="#" class="mx-auto flex-col flex max-w-[24px] items-center justify-center text-black">
+            <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a945b4ae6cf7b_Vector-1.svg" alt="" class="inline-block">
+          </a>
+          <a href="#" class="mx-auto flex-col flex max-w-[24px] items-center justify-center text-black">
+            <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a945560e6cf77_Vector.svg" alt="" class="inline-block">
+          </a>
+          <a href="#" class="mx-auto flex-col flex max-w-[24px] items-center justify-center text-black">
+            <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a940535e6cf7a_Vector-3.svg" alt="" class="inline-block">
+          </a>
+          <a href="#" class="mx-auto flex-col flex max-w-[24px] items-center justify-center text-black">
+            <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/6458c625291a9433a9e6cf88_Vector-2.svg" alt="" class="inline-block">
+          </a>
+        </div>
+        <p class="max-[479px]:text-sm">© Copyright 2024. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
     <div style="display: none;">
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-S38X843KVL"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-S38X843KVL"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
 
-  gtag('config', 'G-S38X843KVL');
-</script>
-</div>
+            gtag('config', 'G-S38X843KVL');
+        </script>
+    </div>
 </body>
+
+
 </html>
