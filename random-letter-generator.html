@@ -10,9 +10,10 @@
         content="Discover nature's diversity with one click using our Random Animal Picture Generator.">
 
     <link rel="shortcut icon" href="./icon.png" />
-    <link rel="canonical" href="https://animalgenerator.co/index.html" />
+    <link rel="canonical" href="https://animalgenerator.co/random-animal-name.html" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="./tailwind.3.4.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <!-- google adsense 
     <meta name="google-adsense-account" content="ca-pub-4461477700183709">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4461477700183709"
@@ -34,51 +35,8 @@
             overflow: hidden;
         }
 
-        #pics {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            align-items: center;
-            width: 40%;
-            margin: auto;
-        }
-
-        #pics .image-container {
-            text-align: center;
-            flex-basis: calc(33.333% - 20px);
-            /* 三张图片并排，减去间隔 */
-            /* margin: 0,0,10px,0;
-            padding: 10px; */
-            margin: 0;
-            padding: 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            /* 设置圆角半径 */
-            position: relative;
-            min-height: 250px;
-            /* 固定高度 */
-            overflow: hidden;
-            /* 确保圆角效果不被内部元素覆盖 */
-            margin: 10px;
-
-            display: flex;
-            flex-direction: column;
-            /* 使子元素垂直排列 */
-            cursor: pointer; /* 鼠标悬停时显示为可点击 */
-        }
-
-        #pics .animal-image {
-            border-radius: 4px;
-            /* 设置圆角半径，与容器一致 */
-            width: 100%;
-            max-height: 100%;
-            
-            object-fit: cover;
-            /* 保持图片比例并填满容器 cover fill contain*/
-            margin:0;
-            padding: 0;
-            display: block;
-        }
+       
+        
 
         .animal-name {
             text-align: center;
@@ -111,42 +69,11 @@
             border: 1px solid #5AAB44;
         }
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
+       
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
      
     </style>
-    <script defer src="./scripts.js"></script>
+    
 </head>
 
 <body>
@@ -164,108 +91,167 @@
         diversity with one click using our Random Animal Picture Generator</h2>
 
     <!-- Hero Button -->
-    <div class="mx-auto flex w-36 flex-col justify-center gap-x-5 gap-y-5 sm:w-full sm:flex-row sm:items-start">
-        <button id="loadPics" class="button button-random">Random</button>
-        <button id="copyButton" class="button button-copy">Copy</button>
-    </div>
-   
-        <div id="pics" class="flex flex-wrap justify-center"></div>
-        <!-- Modal -->
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <iframe id="wiki-iframe" src="" width="100%" height="400px"></iframe>
+    <div class="flex justify-center">
+        <div id="letter-generator" class="flex flex-col items-start w-2/5 bg-gray-100 p-4 rounded-lg">
+            <div class="mb-4 w-full">
+                <label for="number-of-letters" class="block text-sm font-medium text-gray-700">Number of Letters （max is 50）</label>
+                <input type="number" id="number-of-letters" class="p-2 border border-gray-300 rounded w-full" min="1" max="50" value="1" />
             </div>
+            <div class="mb-4 w-full">
+                <label for="separator" class="block text-sm font-medium text-gray-700">Separator</label>
+                <select id="separator" class="p-2 border border-gray-300 rounded w-full">
+                    <option value="\n">Newline</option>
+                    <option value="">None</option>
+                    <option value=" ">Space</option>
+                    <option value=",">,</option>
+                    <option value=".">.</option>
+                    <option value=";">;</option>
+                </select>
+            </div>
+            <div class="mb-4 w-full">
+                <label for="language" class="block text-sm font-medium text-gray-700">Language</label>
+                <select id="language" class="p-2 border border-gray-300 rounded w-full">
+                    <option value="English">English</option>
+                    <option value="German">German</option>
+                    <option value="French">French</option>
+                    <option value="Spanish">Spanish</option>
+                    <option value="Japanese">Japanese</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="Hebrew">Hebrew</option>
+                    <option value="Greek">Greek</option>
+                    <option value="Russian">Russian</option>
+                </select>
+            </div>
+            <div class="mb-4 w-full">
+                <label class="inline-flex items-center">
+                    <input type="checkbox" id="include-uppercase" class="form-checkbox" checked />
+                    <span class="ml-2">Capital Letters</span>
+                </label>
+            </div>
+            <div class="mb-4 w-full">
+                <label class="inline-flex items-center">
+                    <input type="checkbox" id="include-lowercase" class="form-checkbox" checked />
+                    <span class="ml-2">Lowercase Letters</span>
+                </label>
+            </div>
+            <div class="mb-4 w-full">
+                <label class="inline-flex items-center">
+                    <input type="checkbox" id="include-symbols" class="form-checkbox" />
+                    <span class="ml-2">Symbols</span>
+                </label>
+            </div>
+            <div class="flex gap-x-5 mb-4">
+                <button id="generate-letters-button" class="button button-random">Random</button>
+                <button id="copy-letters-button" class="button button-copy">Copy</button>
+            </div>
+            <textarea id="letters-output" class="mt-4 p-2 border border-gray-300 rounded w-full" rows="5" placeholder="Generated Letters" readonly></textarea>
         </div>
+    </div>
+
+    <script>
+        const generateLettersButton = document.getElementById("generate-letters-button");
+        const copyLettersButton = document.getElementById("copy-letters-button");
+        const lettersOutput = document.getElementById("letters-output");
     
-        <script>
-            var animalImages = [
-                'aardvark', 'addax', 'alligator', 'alpaca', 'antelope', 'aoudad', 'armadillo', 'arthropods_herculesbeetle',
-                'baboon', 'bald_eagle', 'bat', 'bear', 'beaver', 'bighorn', 'birds_jackdaw', 'bison', 'blue_crab', 'boar',
-                'buffalo', 'bull', 'bumble_bee', 'burro', 'canary', 'cat', 'lemur', 'leopard', 'lion', 'lizard', 'llama',
-                'lovebird', 'mandrill', 'mare', 'markhor', 'marmoset', 'meerkat', 'mink', 'monkey', 'moose', 'mountain_goat',
-                'mule', 'musk_deer', 'musk_ox', 'mustang', 'mynah_bird', 'orangutan', 'ox', 'panda', 'panther', 'parakeet',
-                'parrot', 'peccary', 'pig', 'polarbear', 'polar_bear', 'pony', 'prairie_dog', 'pronghorn', 'puppy', 'rabbit',
-                'ram', 'rat', 'reindeer', 'salamander', 'seal', 'sealion', 'silver_fox', 'skunk', 'sloth', 'starfish',
-                'steer', 'tapir', 'thorny_devil', 'tiger', 'turtle', 'vicuna', 'walrus', 'warthog', 'waterbuck', 'weasel',
-                'whale', 'wildcat', 'wolf', 'wolverine', 'wombat', 'woodchuck', 'yak'
-            ];
+        generateLettersButton.addEventListener("click", () => {
+            const numberOfLetters = Math.min(parseInt(document.getElementById("number-of-letters").value, 10), 50); // 确保不超过 50
+            
+            let separator = document.getElementById("separator").value;
+            const language = document.getElementById("language").value;
+            const includeUppercase = document.getElementById("include-uppercase").checked;
+            const includeLowercase = document.getElementById("include-lowercase").checked;
+            const includeSymbols = document.getElementById("include-symbols").checked;
     
-            $(document).ready(function () {
-                loadRandomImages(); // 页面加载完成时加载图片
+            // Handle newline separator
+            if (separator === "\\n") {
+                separator = "\n";
+            }
+    
+            const letters = generateLetters(numberOfLetters, separator, language, includeUppercase, includeLowercase, includeSymbols);
+            lettersOutput.value = letters;
+        // 撒花特效
+        confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
             });
+        });
     
-            $('#loadPics').click(function () {
-                loadRandomImages();
-            });
-    
-            $('#copyButton').click(function () {
-                var animalNames = [];
-                $('#pics .animal-name').each(function () {
-                    animalNames.push($(this).text());
+        copyLettersButton.addEventListener("click", () => {
+            navigator.clipboard.writeText(lettersOutput.value)
+                .then(() => {
+                    // 复制成功后，将按钮文本改为'copied'
+                    copyLettersButton.textContent = 'Copied';
+                    // 设置2秒后将按钮文本变回'copy'
+                    setTimeout(() => {
+                        copyLettersButton.textContent = 'Copy';
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
                 });
-                var animalNamesText = animalNames.join(', ');
-                navigator.clipboard.writeText(animalNamesText).then(function () {
-                    alert('Copied: ' + animalNamesText);
-                }, function (err) {
-                    console.error('Could not copy text: ', err);
-                });
-            });
+        });
     
-            function loadRandomImages() {
-                var randomImages = [];
-                var imagesLength = animalImages.length;
-                for (var i = 0; i < 6; i++) {
-                    var randomIndex = Math.floor(Math.random() * imagesLength);
-                    var randomImage = animalImages[randomIndex];
-                    if (randomImages.indexOf(randomImage) === -1) {
-                        randomImages.push(randomImage);
-                    } else {
-                        i--; // 如果重复，重新选择
-                    }
+        function generateLetters(number, separator, language, uppercase, lowercase, symbols) {
+            const charSets = {
+                English: {
+                    uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                    lowercase: 'abcdefghijklmnopqrstuvwxyz'
+                },
+                German: {
+                    uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ',
+                    lowercase: 'abcdefghijklmnopqrstuvwxyzäöüß'
+                },
+                French: {
+                    uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZÀÂÇÉÈÊËÎÏÔÙÛÜŸ',
+                    lowercase: 'abcdefghijklmnopqrstuvwxyzàâçéèêëîïôùûüÿ'
+                },
+                Spanish: {
+                    uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZÁÉÍÑÓÚÜ',
+                    lowercase: 'abcdefghijklmnopqrstuvwxyzáéíñóúü'
+                },
+                Japanese: {
+                    uppercase: 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン',
+                    lowercase: 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん'
+                },
+                Chinese: {
+            uppercase: `赵钱孙李周吴郑王冯陈楮卫蒋沈韩杨朱秦尤许何吕施张孔曹严华金魏陶姜戚谢邹喻柏水窦章云苏潘葛奚范彭郎鲁韦昌马苗凤花方俞任袁柳酆鲍史唐费廉岑薛雷贺倪汤滕殷罗毕郝邬安常乐于时傅皮卞齐康伍余元卜顾孟平黄和穆萧尹`.replace(/\s/g, ''),
+            lowercase: `人之初中性本善相近习远苟不教乃迁道贵以专心中所欲勿施于昔孟母择邻处子学断机杼窦燕山有义方五名俱扬养父过严师惰非宜幼老何为玉琢成器知少时亲友礼仪香九龄能温席孝当执融四岁让梨弟长先首悌次见闻某数识文一而十百千万三才者天地光日月星纲君臣夫妇顺曰春秋冬此运穷南北西东应乎水火木金土行仁智信常容紊稻粱菽麦黍稷六谷食马牛羊鸡犬豕畜饲喜怒哀惧爱恶七情具匏革石丝竹八音高曾祖身孙自至玄族伦恩从兄则恭序与朋敬忠`.replace(/\s/g, '')
+        },
+                Hebrew: {
+                    uppercase: 'אבגדהוזחטיכלמנסעפצקרשת',
+                    lowercase: 'אבגדהוזחטיכלמנסעפצקרשת'
+                },
+                Greek: {
+                    uppercase: 'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ',
+                    lowercase: 'αβγδεζηθικλμνξοπρστυφχψω'
+                },
+                Russian: {
+                    uppercase: 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ',
+                    lowercase: 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
                 }
-                displayImages(randomImages);
+            };
+    
+            const symbolChars = '!@#$%^&*()_+[]{}|;:,.<>?';
+    
+            let allChars = '';
+            if (uppercase && charSets[language]) allChars += charSets[language].uppercase;
+            if (lowercase && charSets[language]) allChars += charSets[language].lowercase;
+            if (symbols) allChars += symbolChars;
+    
+            if (allChars === '') {
+                alert('Please select at least one character type.');
+                return '';
             }
     
-            function displayImages(images) {
-                var html = '';
-                images.forEach(function (image) {
-                    var animalName = image.replace(/_/g, ' '); // 动物名称
-                    var fileName = 'animal//' + image + '.webp'; // 图片文件名
-                    var wikiUrl = 'https://en.wikipedia.org/wiki/' + encodeURIComponent(animalName);
-                    html += '<div class="image-container">' +
-                        '<div class="animal-image" data-wiki-url="' + wikiUrl + '">' +
-                        '<img src="' + fileName + '" alt="' + animalName + '">' +
-                        '</div>' +
-                        '<div class="animal-name">' + animalName + '</div>' +
-                        '</div>';
-                });
-                $('#pics').html(html);
-    
-                // Add click event to open modal with Wikipedia page
-                $('.animal-image').click(function () {
-                    var wikiUrl = $(this).data('wiki-url');
-                    $('#wiki-iframe').attr('src', wikiUrl);
-                    $('#myModal').show();
-                });
+            let letters = [];
+            for (let i = 0; i < number; i++) {
+                const randomIndex = Math.floor(Math.random() * allChars.length);
+                letters.push(allChars[randomIndex]);
             }
-    
-            // Get the <span> element that closes the modal
-            var span = document.getElementsByClassName("close")[0];
-    
-            // When the user clicks on <span> (x), close the modal
-            span.onclick = function () {
-                $('#myModal').hide();
-            }
-    
-            // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function (event) {
-                if (event.target == document.getElementById("myModal")) {
-                    $('#myModal').hide();
-                }
-            }
-        </script>
-        
+            return letters.join(separator);
+        }
+    </script>
     
     
     <section class="mx-auto my-8 max-w-2xl text-left">
@@ -342,18 +328,18 @@
     <h2 class="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
     
     <details open>
-      <summary class="font-medium text-lg cursor-pointer">How to Use the Random Animal Generator</summary>
+      <summary class="font-medium text-lg cursor-pointer">How to Use the Random Animal Name Generator?</summary>
       <div class="mt-2 text-gray-700">
-        <p>1、Click Rondom button，Discover nature's diversity ， using our Random Animal Picture Generator.</p>
-        <p>2、To learn more about an animal, click or tap on it. A pop-up will appear with a brief paragraph from Wikipedia about the animal.</p>
-        <p>3、To copy the names of your animals, simply click the grey copy button. You can paste these names into any word processing program.</p>
+        <p>1、Click Rondom button，Discover nature's diversity ， using our Random Animal Name Generator.
+            There will be a special effect of scattering flowers. Congratulations on knowing the name of the animal</p>
+        <p>2、Click Copy button，To copy the names of your animals,  You can paste these names into any word processing program.</p>
       </div>
     </details>
   
     <details>
-      <summary class="font-medium text-lg cursor-pointer">Uses for the Random Animal Generator</summary>
+      <summary class="font-medium text-lg cursor-pointer">Uses for the Random Animal Name Generator</summary>
       <div class="mt-2 text-gray-700">
-        <p>The Random Animal Generator has many uses, including:</p>
+        <p>The Random Animal Name Generator has many uses, including:</p>
         <ul class="list-disc pl-4">
           <li><strong>1、Teaching Children About Animals:</strong> If your child is just starting to learn about animals, there’s a lot of information to cover. Scientists estimate that there may be up to two million animal species on Earth. Where do you begin? Try using our animal generator. It can provide a few easy animals to start with, and the random element can be a fun way to keep children engaged.</li>
           <li><strong>2、Playing Games:</strong> Similarly, our random animal generator can serve as the basis for a fun, biology-based guessing game. Generate a random animal for each player. Then, in a Charades-like game, ask players to act out their assigned animal. The goal is to get the other players to correctly guess what the animal is.</li>
@@ -365,21 +351,21 @@
       </div>
     </details>
     <details>
-        <summary class="font-medium text-lg cursor-pointer">Why Recommend Random Animal Generator</summary>
+        <summary class="font-medium text-lg cursor-pointer">Why Recommend Random Animal Name Generator</summary>
         <div class="mt-2 text-gray-700">
-          <p>Our website offers a diverse collection of high-quality animal images that are both adorable and entertaining. The random generation feature ensures that each visit is unique and engaging. We are constantly updating our site with new animal species and features, making it easy for everyone to discover amazing animal images.</p>
+          <p>Our website offers a diverse collection of animal names that are both adorable and entertaining. The random generation feature ensures that each visit is unique and engaging. We are constantly updating our site with new animal species and features, making it easy for everyone to learn animal names.</p>
           
         </div>
       </details>
       <details>
-        <summary class="font-medium text-lg cursor-pointer">How Do We Generate Random Animal Images?
+        <summary class="font-medium text-lg cursor-pointer">How Do We Generate Random Animal Names?
         </summary>
         <div class="mt-2 text-gray-700">
-          <p>Our website is powered by an extensive database of animal images. 
+          <p>Our website is powered by an extensive database of animal names. 
             Each time a user clicks the 'Random Animal' button, our system randomly 
-            selects an image from this database to display. 
-            This automated process ensures that users receive a unique and surprising animal image with every click. 
-            We are dedicated to expanding our image database to keep the random selections fresh and exciting.</p>
+            selects an animal name from this database to display. 
+            This automated process ensures that users receive a unique and surprising animal name with every click. 
+            We are dedicated to expanding our animal name database to keep the random selections fresh and exciting.</p>
           
         </div>
       </details>
