@@ -31,6 +31,12 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>https://animalgenerator.co/blog.html</loc>
+        <lastmod>2024-10-08</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://animalgenerator.co/terms-of-service.html</loc>
         <lastmod>2024-10-08</lastmod>
         <changefreq>monthly</changefreq>
