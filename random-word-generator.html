@@ -4,16 +4,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <title>animal generator</title>
+
+    <title>random word generator</title>
     <meta name="description"
-        content="Discover nature's diversity with one click using our Random Animal Picture Generator.">
+        content="welcome to use random word generator,click random button to generate random word.">
 
     <link rel="shortcut icon" href="./icon.png" />
-    <link rel="canonical" href="https://animalgenerator.co/index.html" />
+    <link rel="canonical" href="https://animalgenerator.co/random-word-generator.html" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="./tailwind.3.4.1.js"></script>
-<!-- google adsense 
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <!-- google adsense 
     <meta name="google-adsense-account" content="ca-pub-4461477700183709">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4461477700183709"
      crossorigin="anonymous"></script>-->
@@ -34,51 +35,8 @@
             overflow: hidden;
         }
 
-        #pics {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            align-items: center;
-            width: 40%;
-            margin: auto;
-        }
 
-        #pics .image-container {
-            text-align: center;
-            flex-basis: calc(33.333% - 20px);
-            /* 三张图片并排，减去间隔 */
-            /* margin: 0,0,10px,0;
-            padding: 10px; */
-            margin: 0;
-            padding: 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            /* 设置圆角半径 */
-            position: relative;
-            min-height: 250px;
-            /* 固定高度 */
-            overflow: hidden;
-            /* 确保圆角效果不被内部元素覆盖 */
-            margin: 10px;
 
-            display: flex;
-            flex-direction: column;
-            /* 使子元素垂直排列 */
-            cursor: pointer; /* 鼠标悬停时显示为可点击 */
-        }
-
-        #pics .animal-image {
-            border-radius: 4px;
-            /* 设置圆角半径，与容器一致 */
-            width: 100%;
-            max-height: 100%;
-            
-            object-fit: cover;
-            /* 保持图片比例并填满容器 cover fill contain*/
-            margin:0;
-            padding: 0;
-            display: block;
-        }
 
         .animal-name {
             text-align: center;
@@ -89,6 +47,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
         .button {
             display: inline-block;
             padding: 10px 20px;
@@ -110,43 +69,8 @@
             color: #5AAB44;
             border: 1px solid #5AAB44;
         }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-     
     </style>
-    <script defer src="./scripts.js"></script>
+
 </head>
 
 <body>
@@ -158,345 +82,809 @@
             <li><a href="./blog.html" class="text-white hover:text-gray-800">Blog</a></li>
         </ul>
     </nav>
-    <h1 class="m-5 text-center text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">Random Animal
+    <h1 class="m-5 text-center text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">random word
         Generator</h1>
-    <h2 class="mx-auto mb-6 text-center text-sm text-[#636262] sm:px-8 sm:text-xl md:px-24 lg:mb-8">Discover nature's
-        diversity with one click using our Random Animal Picture Generator</h2>
+    <h2 class="mx-auto mb-6 text-center text-sm text-[#636262] sm:px-8 sm:text-xl md:px-24 lg:mb-8">
+        Welcome to use random word generator,click random button to generate random word</h2>
 
     <!-- Hero Button -->
-    <div class="mx-auto flex w-36 flex-col justify-center gap-x-5 gap-y-5 sm:w-full sm:flex-row sm:items-start">
-        <button id="loadPics" class="button button-random">Random</button>
-        <button id="copyButton" class="button button-copy">Copy</button>
-    </div>
-   
-        <div id="pics" class="flex flex-wrap justify-center"></div>
-        <!-- Modal -->
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <iframe id="wiki-iframe" src="" width="100%" height="400px"></iframe>
+
+
+    <div class="flex justify-center">
+        <div id="word-generator" class="flex flex-col items-start w-2/5 bg-gray-100 p-4 rounded-lg">
+            <div class="mb-4 w-full">
+
+                <label class="block text-sm font-medium mb-2">Category</label>
+                <select id="category" class="w-2/5 p-2 border rounded">
+                    <option value="basic">Basic Parts of Speech</option>
+                    <option value="thematic">Thematic</option>
+                    <option value="complex">Complex</option>
+                    <option value="creative">Creative and Fun</option>
+                    <option value="frequency">Frequency-Based</option>
+                </select>
             </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Subcategory</label>
+                <select id="subcategory" class="w-full p-2 border rounded">
+                    <!-- Subcategories will be populated dynamically -->
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Number of Words</label>
+                <input type="number" id="numWords" class="w-full p-2 border rounded" min="1" max="10" value="1">
+            </div>
+
+            <div class="flex gap-x-5 mb-4">
+                <button id="generateButton" class="button button-random">Random</button>
+                <button id="copyButton" class="button button-copy">Copy</button>
+            </div>
+            <textarea id="output" class="mt-4 p-2 border border-gray-300 rounded w-full" rows="5"
+                placeholder="Generated Letters" readonly></textarea>
+
         </div>
-    
-        <script>
-            var animalImages = [
-                'aardvark', 'addax', 'alligator', 'alpaca', 'antelope', 'aoudad', 'armadillo', 'arthropods_herculesbeetle',
-                'baboon', 'bald_eagle', 'bat', 'bear', 'beaver', 'bighorn', 'birds_jackdaw', 'bison', 'blue_crab', 'boar',
-                'buffalo', 'bull', 'bumble_bee', 'burro', 'canary', 'cat', 'lemur', 'leopard', 'lion', 'lizard', 'llama',
-                'lovebird', 'mandrill', 'mare', 'markhor', 'marmoset', 'meerkat', 'mink', 'monkey', 'moose', 'mountain_goat',
-                'mule', 'musk_deer', 'musk_ox', 'mustang', 'mynah_bird', 'orangutan', 'ox', 'panda', 'panther', 'parakeet',
-                'parrot', 'peccary', 'pig', 'polarbear', 'polar_bear', 'pony', 'prairie_dog', 'pronghorn', 'puppy', 'rabbit',
-                'ram', 'rat', 'reindeer', 'salamander', 'seal', 'sealion', 'silver_fox', 'skunk', 'sloth', 'starfish',
-                'steer', 'tapir', 'thorny_devil', 'tiger', 'turtle', 'vicuna', 'walrus', 'warthog', 'waterbuck', 'weasel',
-                'whale', 'wildcat', 'wolf', 'wolverine', 'wombat', 'woodchuck', 'yak'
-            ];
-    
-            $(document).ready(function () {
-                loadRandomImages(); // 页面加载完成时加载图片
+    </div>
+
+    <script>
+        const wordData = {
+            basic: {
+                nouns: ['dog', 'cat', 'car', 'tree', 'house', 'apple', 'book', 'chair', 'city', 'computer',
+                    'bicycle', 'building', 'camera', 'cloud', 'coat', 'coffee', 'cup', 'door', 'dress', 'eye',
+                    'finger', 'flower', 'food', 'garden', 'glass', 'hat', 'key', 'lamp', 'leaf', 'letter',
+                    'moon', 'mountain', 'ocean', 'pen', 'pencil', 'phone', 'piano', 'plant', 'rain', 'river',
+                    'road', 'rock', 'school', 'shoe', 'shop', 'snow', 'star', 'sun', 'table', 'television',
+                    'train', 'tree', 'umbrella', 'wall', 'window', 'boat', 'bus', 'cake', 'camera', 'card',
+                    'carpet', 'ceiling', 'cheese', 'clock', 'coin', 'cushion', 'desk', 'doll', 'duck', 'egg',
+                    'fan', 'feather', 'fork', 'glove', 'grape', 'guitar', 'hand', 'hat', 'helicopter', 'hill',
+                    'ice', 'insect', 'jacket', 'juice', 'kettle', 'kite', 'knife', 'ladder', 'lake', 'lock',
+                    'map', 'mirror', 'nail', 'nest', 'notebook', 'onion', 'orange', 'oven', 'palm', 'paper',
+                    'pearl', 'pillow', 'pizza', 'plane', 'plate', 'pocket', 'potato', 'queen', 'rainbow',
+                    'ring', 'rocket', 'roof', 'rug', 'sand', 'scarf', 'scooter', 'shirt', 'shovel', 'sink',
+                    'skirt', 'sofa', 'spoon', 'stamp', 'strawberry', 'suit', 'sweater', 'swing', 'table',
+                    'towel', 'tractor', 'truck', 'vase', 'violin', 'wallet', 'wheel', 'whistle', 'window',
+                    'zipper', 'backpack', 'basket', 'battery', 'beach', 'beard', 'bell', 'blanket', 'blouse',
+                    'bone', 'boot', 'bottle', 'box', 'brush', 'butter', 'candle', 'carrot', 'cherry',
+                    'chocolate', 'cloud', 'cookie', 'crayon', 'cucumber', 'dragon', 'drum', 'eraser', 'fence',
+                    'flute', 'grill', 'horn', 'jungle', 'lamp', 'lemon', 'lobster', 'milk', 'octopus', 'parrot',
+                    'peach', 'pencil', 'quilt', 'robot', 'sandwich', 'shoe', 'skull', 'stool', 'turtle', 'vulture',
+                    'whale', 'zebra', 'chair', 'desk', 'keyboard', 'mouse', 'monitor', 'backpack', 'notebook',
+                    'calendar', 'clock', 'picture', 'cushion', 'bowl', 'spoon', 'fork', 'knife', 'napkin', 'ladder'],
+
+                verbs: ['run', 'jump', 'swim', 'drive', 'fly', 'walk', 'talk', 'eat', 'sleep', 'sing',
+                    'dance', 'write', 'read', 'build', 'create', 'cook', 'clean', 'work', 'play',
+                    'paint', 'draw', 'laugh', 'cry', 'study', 'teach', 'learn', 'watch', 'listen',
+                    'think', 'dream', 'hope', 'plan', 'decide', 'open', 'close', 'give', 'take',
+                    'find', 'lose', 'make', 'break', 'buy', 'sell', 'send', 'receive', 'choose',
+                    'wait', 'hurry', 'call', 'answer', 'help', 'save', 'print', 'publish', 'share',
+                    'move', 'stay', 'push', 'pull', 'throw', 'catch', 'drive', 'ride', 'fix', 'repair',
+                    'cut', 'sew', 'knit', 'tie', 'untie', 'lift', 'drop', 'sit', 'stand', 'kneel',
+                    'crawl', 'climb', 'jump', 'run', 'walk', 'swim', 'fly', 'dive', 'row', 'sail',
+                    'skate', 'ski', 'surf', 'cycle', 'bake', 'boil', 'fry', 'grill', 'roast', 'steam',
+                    'slice', 'chop', 'mix', 'stir', 'pour', 'knead', 'fold', 'measure', 'weigh',
+                    'decorate', 'serve', 'taste', 'smell', 'touch', 'see', 'hear', 'feel', 'remember',
+                    'forget', 'understand', 'explain', 'describe', 'compare', 'contrast', 'analyze',
+                    'research', 'investigate', 'experiment', 'explore', 'imagine', 'design', 'build',
+                    'repair', 'invent', 'develop', 'test', 'organize', 'plan', 'schedule', 'arrange',
+                    'manage', 'direct', 'lead', 'follow', 'supervise', 'train', 'coach', 'encourage',
+                    'support', 'help', 'rescue', 'defend', 'protect', 'attack', 'fight', 'argue',
+                    'agree', 'disagree', 'promise', 'apologize', 'thank', 'congratulate', 'complain',
+                    'suggest', 'recommend', 'advise', 'warn', 'inform', 'explain', 'persuade', 'convince',
+                    'debate', 'discuss', 'negotiate', 'bargain', 'compliment', 'flatter'],
+
+                adjectives: ['happy', 'sad', 'fast', 'slow', 'bright', 'dark', 'cold', 'hot', 'warm', 'cool',
+                    'big', 'small', 'tall', 'short', 'wide', 'narrow', 'thick', 'thin', 'heavy', 'light',
+                    'strong', 'weak', 'hard', 'soft', 'smooth', 'rough', 'clean', 'dirty', 'dry', 'wet',
+                    'new', 'old', 'young', 'ancient', 'modern', 'loud', 'quiet', 'noisy', 'silent',
+                    'sharp', 'dull', 'smart', 'stupid', 'brave', 'cowardly', 'funny', 'serious',
+                    'kind', 'cruel', 'polite', 'rude', 'friendly', 'unfriendly', 'rich', 'poor',
+                    'beautiful', 'ugly', 'handsome', 'plain', 'pretty', 'cute', 'large', 'tiny',
+                    'round', 'square', 'flat', 'bumpy', 'smooth', 'sharp', 'blunt', 'fresh', 'stale',
+                    'sweet', 'sour', 'bitter', 'salty', 'spicy', 'bland', 'hot', 'cold', 'warm',
+                    'cool', 'dry', 'wet', 'sticky', 'slippery', 'soft', 'hard', 'fluffy', 'firm',
+                    'strong', 'weak', 'heavy', 'light', 'deep', 'shallow', 'high', 'low', 'short',
+                    'tall', 'long', 'brief', 'quick', 'slow', 'fast', 'speedy', 'rapid', 'gentle',
+                    'rough', 'calm', 'stormy', 'quiet', 'noisy', 'loud', 'silent', 'clear', 'cloudy',
+                    'foggy', 'rainy', 'snowy', 'windy', 'sunny', 'hot', 'cold', 'chilly', 'cool',
+                    'warm', 'humid', 'dry', 'moist', 'sticky', 'slippery', 'slimy', 'greasy', 'clean',
+                    'dirty', 'dusty', 'muddy', 'wet', 'soaked', 'dry', 'parched', 'damp', 'drippy',
+                    'slick', 'polished', 'shiny', 'matte', 'bright', 'dull', 'glossy', 'reflective'],
+
+                adverbs: ['quickly', 'slowly', 'happily', 'sadly', 'loudly', 'quietly', 'gracefully', 'awkwardly',
+                    'angrily', 'gently', 'softly', 'harshly', 'easily', 'difficultly', 'eagerly', 'reluctantly',
+                    'rapidly', 'slowly', 'calmly', 'frantically', 'boldly', 'timidly', 'bravely', 'cowardly',
+                    'beautifully', 'ugly', 'carefully', 'carelessly', 'closely', 'distantly', 'eagerly',
+                    'hesitantly', 'kindly', 'rudely', 'politely', 'disrespectfully', 'enthusiastically',
+                    'reluctantly', 'immediately', 'eventually', 'instantly', 'deliberately', 'accidentally',
+                    'easily', 'with difficulty', 'freely', 'strictly', 'briefly', 'endlessly', 'lazily',
+                    'actively', 'quickly', 'slowly', 'swiftly', 'gradually', 'eventually', 'punctually',
+                    'late', 'early', 'immediately', 'suddenly', 'eventually', 'sometimes', 'always',
+                    'never', 'often', 'rarely', 'occasionally', 'frequently', 'constantly', 'periodically',
+                    'regularly', 'irregularly', 'daily', 'weekly', 'monthly', 'yearly', 'annually',
+                    'forever', 'temporarily', 'permanently', 'clearly', 'vaguely', 'directly', 'indirectly',
+                    'honestly', 'dishonestly', 'openly', 'secretly', 'loudly', 'softly', 'harshly', 'gently',
+                    'angrily', 'calmly', 'bravely', 'timidly', 'boldly', 'nervously', 'confidently',
+                    'foolishly', 'wisely', 'intelligently', 'stupidly', 'carefully', 'carelessly', 'deliberately',
+                    'accidentally', 'quickly', 'slowly', 'rapidly', 'gradually', 'immediately', 'eventually',
+                    'deliberately', 'easily', 'with difficulty', 'freely', 'strictly', 'accurately',
+                    'inaccurately', 'closely', 'distantly', 'smoothly', 'roughly', 'gently', 'violently']
+
+            },
+            thematic: {
+                animals: ['lion', 'tiger', 'bear', 'wolf', 'fox', 'elephant', 'giraffe', 'zebra', 'hippopotamus',
+                    'rhino', 'kangaroo', 'koala', 'panda', 'leopard', 'cheetah', 'buffalo', 'crocodile',
+                    'alligator', 'rabbit', 'squirrel', 'rat', 'mouse', 'bat', 'owl', 'eagle', 'sparrow',
+                    'parrot', 'flamingo', 'penguin', 'seal', 'dolphin', 'whale', 'shark', 'octopus',
+                    'jellyfish', 'lobster', 'crab', 'ant', 'bee', 'butterfly', 'spider', 'snail', 'frog',
+                    'snake', 'lizard', 'turtle', 'chicken', 'duck', 'goose', 'peacock', 'turkey', 'cow',
+                    'sheep', 'goat', 'pig', 'donkey', 'horse', 'camel', 'llama', 'alpaca', 'hedgehog',
+                    'porcupine', 'skunk', 'armadillo', 'chimpanzee', 'gorilla', 'orangutan', 'baboon',
+                    'lemur', 'hyena', 'jackal', 'raccoon', 'badger', 'beaver', 'otter', 'mole', 'fox',
+                    'coyote', 'lynx', 'bobcat', 'cougar', 'moose', 'deer', 'reindeer', 'caribou', 'elk',
+                    'yak', 'bison', 'walrus', 'manatee', 'narwhal', 'stork', 'heron', 'ibis', 'woodpecker',
+                    'vulture', 'pigeon', 'crow', 'raven', 'magpie', 'quail', 'ostrich', 'emu', 'platypus',
+                    'echidna', 'iguana', 'gecko', 'komodo dragon', 'python', 'cobra', 'viper', 'boa',
+                    'tortoise', 'salmon', 'trout', 'goldfish', 'carp', 'catfish', 'tuna', 'mackerel',
+                    'halibut', 'cod', 'sardine', 'anchovy', 'shrimp', 'squid', 'clam', 'oyster', 'starfish',
+                    'seahorse', 'gull', 'albatross', 'swallow', 'kite', 'falcon', 'buzzard', 'pelican',
+                    'albatross', 'swallow', 'rooster', 'emu', 'tarsier', 'capybara', 'mongoose', 'ferret'],
+
+                colors: ['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'brown', 'black', 'white',
+                    'gray', 'cyan', 'magenta', 'turquoise', 'lavender', 'indigo', 'maroon', 'teal', 'olive',
+                    'navy', 'coral', 'gold', 'silver', 'bronze', 'peach', 'beige', 'cream', 'ivory',
+                    'khaki', 'mauve', 'lime', 'emerald', 'scarlet', 'burgundy', 'charcoal', 'mustard',
+                    'plum', 'saffron', 'tangerine', 'rust', 'salmon', 'azure', 'aquamarine', 'amber',
+                    'chartreuse', 'fuchsia', 'mint', 'orchid', 'pearl', 'periwinkle', 'rose', 'sapphire',
+                    'seafoam', 'slate', 'smoke', 'tan', 'wheat', 'blush', 'carmine', 'cerulean', 'cobalt',
+                    'denim', 'honey', 'jade', 'lemon', 'neon', 'ocean', 'pastel', 'ruby', 'sand', 'sepia',
+                    'sky', 'snow', 'spice', 'steel', 'sunset', 'topaz', 'umber', 'velvet', 'zinc', 'amethyst',
+                    'antique', 'basil', 'cinnamon', 'chocolate', 'copper', 'cream', 'emerald', 'eggplant',
+                    'mulberry', 'tan', 'skyblue', 'dustyrose', 'storm', 'wildberry', 'pistachio', 'citrus',
+                    'denimblue', 'iceblue', 'midnightblue', 'lemonyellow', 'flamingopink', 'watermelon',
+                    'seagreen', 'driftwood', 'clay', 'hazel', 'raven', 'snowwhite'],
+
+                food: ['apple', 'banana', 'carrot', 'bread', 'cheese', 'pizza', 'pasta', 'burger', 'steak',
+                    'chicken', 'fish', 'rice', 'potato', 'tomato', 'onion', 'garlic', 'pepper', 'spinach',
+                    'lettuce', 'cucumber', 'egg', 'milk', 'yogurt', 'butter', 'cream', 'sugar', 'salt',
+                    'honey', 'jam', 'bacon', 'sausage', 'pancake', 'waffle', 'cookie', 'cake', 'pie',
+                    'muffin', 'donut', 'cereal', 'pudding', 'chocolate', 'candy', 'ice cream', 'popsicle',
+                    'sandwich', 'taco', 'burrito', 'salad', 'soup', 'stew', 'sushi', 'ramen', 'noodles',
+                    'dumplings', 'spring rolls', 'fries', 'chips', 'popcorn', 'pretzel', 'bagel', 'croissant',
+                    'toast', 'oatmeal', 'quiche', 'lasagna', 'meatball', 'kebab', 'falafel', 'hummus',
+                    'guacamole', 'quesadilla', 'nachos', 'barbecue', 'grill', 'ketchup', 'mustard',
+                    'mayonnaise', 'hotdog', 'avocado', 'pear', 'peach', 'grape', 'cherry', 'blueberry',
+                    'strawberry', 'watermelon', 'melon', 'kiwi', 'mango', 'papaya', 'pineapple', 'coconut',
+                    'lime', 'lemon', 'orange', 'plum', 'fig', 'pomegranate', 'dates', 'raisin', 'beet',
+                    'pumpkin', 'squash', 'zucchini', 'peas', 'beans', 'broccoli', 'cauliflower', 'corn'],
+
+                nature: [
+                    'river', 'mountain', 'forest', 'ocean', 'lake', 'valley', 'creek', 'island', 'beach', 'desert', 'prairie', 'jungle', 'meadow', 'village', 'farm', 'field', 'garden', 'tree', 'plant', 'flower', 'grass', 'leaf', 'root', 'bark', 'branch', 'trunk', 'canopy', 'shrub', 'vine', 'bush', 'herb', 'wildflower', 'wildlife', 'habitat', 'ecosystem', 'biome', 'tundra', 'savannah', 'rainforest', 'deciduous',
+                    'evergreen', 'coniferous', 'mangrove', 'thicket', 'glade', 'fell', 'heath', 'moor', 'bog', 'fen', 'marsh', 'swamp', 'wetland', 'pond', 'reservoir', 'fjord', 'gulf', 'estuary', 'bay', 'cove', 'strait', 'cape', 'coast', 'seashore', 'dune', 'cliff', 'bluff', 'ledge', 'escarpment', 'plateau', 'mesa', 'butte', 'hill', 'ridge', 'slope', 'dell', 'dale', 'gorge', 'canyon', 'gulch', 'draw', 'wash', 'arroy', 'torrent', 'rapids', 'waterfall', 'spring', 'well', 'brook', 'rill', 'stream', 'creek', 'rivulet', 'tributary',
+                    'delta', 'bar', 'reef', 'atoll', 'key', 'knoll', 'mound', 'moraine', 'outcrop', 'scarp', 'talus', 'terrace', 'bench', 'flat', 'terrace', 'headland', 'spit', 'barrier', 'isthmus', 'peninsula', 'volcano', 'crater', 'caldera', 'fumarole', 'geyser', 'hot spring', 'mud pot', 'sulphur spring', 'geothermal', 'fault', 'vent', 'dike', 'sill', 'dyke', 'lode', 'vein', 'ore', 'mineral', 'precious stone', 'gemstone', 'crystal', 'amethyst', 'quartz', 'mica', 'shale', 'slate', 'schist', 'gypsum', 'limestone', 'marble', 'granite', 'obsidian', 'petrified wood', 'fossil', 'dolomite', 'chert', 'flint', 'chert', 'agate', 'jade', 'opal', 'pearl', 'ammonite', 'petrified', 'rock', 'igneous', 'sedimentary', 'metamorphic',
+                    'boulder', 'stone', 'gravel', 'pebble', 'cobble', 'sand', 'soil', 'clay', 'silt', 'loam', 'humus', 'compost', 'topsoil', 'substrate', 'horizon', 'alluvium', 'loess', 'regolith', 'talus', 'scree', 'moraine', 'outwash', 'kame', 'esker', 'drumlin', 'roche moutonnée', 'arete', 'cornice', 'serac', 'bergschrund', 'crevasse', 'snowfield', 'snowpack', 'glacier', 'iceberg', 'ice shelf', 'ice cap', 'ice sheet', 'permafrost', 'tundra', 'alpine', 'arctic', 'antarctic', 'boreal', 'equatorial', 'seasonal', 'biannual', 'annual', 'perennial', 'flora', 'fauna', 'habitat', 'conservation', 'preservation', 'reforestation', 'reclamation', 'renewable', 'sustainable', 'ecology', 'environment', 'greenhouse', 'carbon',
+                    'footprint', 'emission', 'atmosphere', 'biosphere', 'hydrosphere', 'lithosphere', 'asthenosphere', 'troposphere', 'stratosphere', 'mesosphere', 'thermosphere', 'exosphere', 'ionosphere', 'magnetosphere', 'air', 'water', 'fire', 'earth', 'wind', 'storm', 'thunder', 'lightning', 'cyclone', 'hurricane', 'typhoon', 'tornado', 'whirlwind', 'dust devil', 'fog', 'mist', 'smoke', 'haze', 'cloud', 'rain', 'drizzle', 'shower', 'downpour', 'snow', 'sleet', 'hail', 'ice', 'frost', 'dew', 'humidity', 'temperature', 'climate', 'weather', 'forecast', 'phenomenon', 'solstice', 'equinox', 'season', 'spring', 'summer', 'autumn', 'fall', 'winter', 'day', 'night', 'dawn', 'dusk', 'twilight', 'sunset', 'sunrise',
+                    'noon', 'midnight', 'horizon', 'sky', 'sun', 'moon', 'star', 'galaxy', 'constellation', 'zodiac', 'planet', 'asteroid', 'comet', 'meteor', 'meteorite', 'nebula'
+                ],
+
+                technology: [
+                    'computer', 'smartphone', 'internet', 'robot', 'AI', 'software', 'hardware', 'laptop',
+                    'tablet', 'server', 'database', 'network', 'circuit', 'transistor', 'microprocessor', 'chip', 'algorithm', 'programming', 'coding', 'app', 'application', 'operating system', 'OS', 'Windows', 'Linux', 'MacOS', 'Android', 'iOS', 'device', 'peripheral', 'monitor', 'mouse',
+                    'keyboard', 'printer', 'scanner', 'storage', 'hard drive', 'SSD', 'memory', 'RAM', 'ROM', 'CD', 'DVD', 'USB', 'port', 'HDMI', 'VGA', 'Bluetooth', 'Wi-Fi', 'router', 'modem', 'satellite', 'cable', 'DSL', 'fiber', 'broadband', 'ISP', 'web', 'website', 'webpage', 'browser', 'search engine', 'SEO', 'HTML', 'CSS', 'JavaScript', 'framework', 'library', 'API', 'SDK', 'VR', 'AR', 'MR', 'XR', 'virtual reality',
+                    'augmented reality', 'mixed reality', 'hologram', '3D printing', 'additive manufacturing', 'automation', 'IoT', 'Internet of Things', 'smart home', 'home automation', 'wearable', 'smartwatch', 'fitness tracker', 'health tech', 'telemedicine', 'cloud', 'cloud computing', 'SaaS', 'PaaS', 'IaaS', 'data center', 'mainframe', 'supercomputer', 'quantum computing', 'nanotechnology', 'biotech', 'genetics', 'bioinformatics',
+                    'neuro tech', 'brain-computer interface', 'cybersecurity', 'encryption', 'firewall', 'antivirus', 'malware', 'ransomware', 'spyware', 'adware', 'phishing', 'hacking', 'ethical hacking', 'penetration testing', 'IT', 'information technology', 'digital', 'digital marketing', 'e-commerce', 'cryptocurrency', 'blockchain', 'NFT', 'smart contract', 'decentralization', 'metaverse', 'gaming', 'video game', 'console', 'PC gaming',
+                    'VR gaming', 'e-sports', 'streaming', 'social media', 'chat', 'messaging', 'email', 'collaboration', 'video conferencing', 'project management', 'CRM', 'ERP', 'SCM', 'BI', 'business intelligence', 'data analytics', 'big data', 'AI assistant', 'chatbot', 'machine learning', 'deep learning', 'neural network', 'natural language processing', 'computer vision', 'image recognition', 'facial recognition', 'speech recognition', 'gesture control', 'voice control', 'touchscreen', 'haptic feedback', 'motion control', 'drones', 'UAV', 'quadcopter', 'autonomous vehicle', 'self-driving car', 'electric vehicle', 'EV', 'solar energy', 'renewable energy', 'wind energy',
+                    'hydro energy', 'nuclear energy', 'geothermal energy', 'bioenergy', 'sustainable tech', 'eco tech', 'green tech', 'recycling', 'waste management', 'smart grid', 'energy efficiency', 'smart city', 'urban planning', 'GIS', 'geographic information system', 'GPS', 'global positioning system', 'telemetry', 'remote sensing', 'satellite imagery', 'LiDAR', 'radar', 'sonar', 'sensor', 'IoT device', 'smart sensor', 'actuator', 'microcontroller', 'FPGA', 'ASIC', 'microelectromechanical systems', 'MEMS', 'nanotechnology', 'molecular manufacturing', 'quantum dot', 'graphene', 'nanowires', 'nanorings', 'nanocrystals', 'nanolasers', 'nanomagnets', 'nanopores', 'nanocoatings', 'nanofilm'
+                ],
+                sports: [
+                    'soccer', 'basketball', 'tennis', 'golf', 'cricket', 'football', 'baseball', 'hockey', 'rugby',
+                    'volleyball', 'tennis', 'badminton', 'ping pong', 'table tennis', 'handball', 'water polo', 'lacrosse',
+                    'field hockey', 'box lacrosse', 'ice hockey', 'curling', 'bowl', 'bowling', 'cricket', 'darts', 'golf',
+                    'shuffleboard', 'skeet shooting', 'trap shooting', 'archery', 'fencing', 'judo', 'karate', 'kung fu',
+                    'taekwondo', 'martial arts', 'sumo', 'wrestling', 'boxing', 'muay thai', 'kickboxing', 'road cycling',
+                    'track cycling', 'mountain biking', 'BMX', 'triathlon', 'duathlon', 'modern pentathlon', 'ironman', 'marathon',
+                    'race walking', 'skiing', 'snowboarding', 'ice skating', 'figure skating', 'speed skating', 'short track speed skating',
+                    'long track speed skating', 'luge', 'skeleton', 'bobsled', 'sled', 'curling', 'freestyle skiing', 'cross-country skiing',
+                    'nordic skiing', 'alpine skiing', 'biathlon', 'ski jumping', 'nordic combined', 'freestyle snowboarding', 'snowboard cross',
+                    'paralympic sports', 'wheelchair basketball', 'wheelchair rugby', 'blind soccer', 'powerlifting', 'weightlifting', 'bodybuilding', 'strongman',
+                    'strongwoman', ' Highland games', 'rowing', 'canoeing', 'kayak', 'dragon boat racing', 'sailing', 'windsurfing', 'kitesurfing', 'surfing',
+                    'bodysurfing', 'skimboarding', 'wakeboarding', 'waterskiing', 'wakesurfing', 'jet skiing', 'parasailing', 'scuba diving', 'snorkeling', 'free diving',
+                    'spearfishing', 'squash', 'racquetball', 'paddleball', 'badminton', 'tennis', 'table tennis', 'baseball', 'softball', 'cricket',
+                    'Australian rules football', 'Gaelic football', 'gridiron football', 'Canadian football', 'flag football', 'touch football', 'soccer', 'association football', 'beach soccer', 'indoor soccer', 'futsal', 'street football', 'five-a-side football', 'indoor cricket',
+                    'beach cricket', 'beach volleyball', 'beach handball', 'beach tennis', 'beach rugby', 'flag rugby', 'touch rugby', 'tag rugby', 'sevens rugby', 'ten-a-side football', 'indoor netball', 'korfball', 'ultimate', 'frisbee', 'disc golf', 'footgolf', 'equestrian', 'show jumping', 'dressage', 'eventing', 'polo', 'endurance riding', 'Western riding', 'reining', 'gymnastics', 'artistic gymnastics',
+                    'rhythmic gymnastics', 'trampoline', 'aerobic gymnastics', 'acrobatic gymnastics', 'parkour', 'freerunning', 'cheerleading', 'dance sport', 'crossfit', 'powerlifting', 'weightlifting', 'bodybuilding', 'strongman', 'strongwoman', 'highland games', 'rowing', 'canoeing', 'kayak', 'dragon boat racing', 'sailing', 'windsurfing', 'kitesurfing', 'surfing', 'bodysurfing', 'skimboarding', 'wakeboarding',
+                    'waterskiing', 'wakesurfing', 'jet skiing', 'parasailing', 'scuba diving', 'snorkeling'],
+
+            },
+            complex: {
+                emotions: [
+                    'joy', 'anger', 'fear', 'surprise', 'disgust', 'sadness', 'love', 'happiness', 'excitement', 'contentment', 'pleasure', 'ecstasy', 'elation', 'admiration', 'amusement', 'anticipation', 'appreciation', 'ardour', 'bashfulness', 'bliss', 'compassion', 'confusion', 'courage', 'curiosity', 'dejection', 'delight', 'desire', 'despair', 'disappointment', 'dismay', 'displeasure', 'distress', 'eagerness',
+                    'embarrassment', 'empathy', 'enchantment', 'enjoyment', 'envy', 'exhilaration', 'frustration', 'grief', 'gratitude', 'guilt', 'hate', 'happiness', 'hope', 'humiliation', 'hysteria', 'interest', 'irritation', 'jealousy', 'longing', 'loneliness', 'melancholy', 'mirth', 'misery', 'passion', 'pity', 'rage', 'rapture', 'regret', 'remorse', 'resentment', 'satisfaction', 'self-pity', 'serenity', 'sorrow', 'sympathy', 'terror', 'triumph', 'unease', 'vexation', 'warmth', 'whimsy', 'woe', 'wonder', 'zest', 'acceptance', 'affection', 'aggravation', 'alarm',
+                    'alienation', 'amazement', 'ambivalence', 'amusement', 'anxiety', 'apathy', 'ardor', 'bashfulness', 'bored', 'bravery', 'calmness', 'cheerfulness', 'childlike', 'complacence', 'concern', 'contempt', 'conviction', 'courage', 'craven', 'crestfallen', 'cross', 'curious', 'defeated', 'dejection', 'delight', 'depressed', 'devoted', 'disgruntled', 'disheartened', 'disillusioned', 'dismayed', 'disturbed', 'eager',
+                    'ecstatic', 'enamored', 'encouraged', 'enraged', 'envious', 'exuberant', 'fervent', 'fervor', 'feverish', 'flustered', 'forlorn', 'frantic', 'frustrated', 'furious', 'giddy', 'gloom', 'gloomy', 'glum', 'guilt', 'guiltless', 'heartbroken', 'heavy-hearted', 'hopeful', 'hot-tempered', 'humble', 'humorous', 'hungry', 'hurt', 'impatient', 'indignant', 'infatuated', 'infuriated', 'insecure', 'inspired', 'intoxicated', 'irritable', 'isolated', 'jealous', 'lighthearted', 'listless', 'lively', 'longing', 'lovely', 'loving', 'melancholic', 'merry', 'mournful',
+                    'nostalgic', 'numb', 'panicked', 'passionate', 'perturbed', 'pessimistic', 'piqued', 'pleased', 'poignant', 'quivering', 'ravishing', 'reverent', 'sad', 'sanguine', 'sarcastic', 'satirical', 'satisfied', 'savory', 'serious', 'serene', 'shame', 'shy', 'sick', 'sleepy', 'smug', 'sorrowful', 'spirited', 'spiritless', 'spiteful', 'splendid', 'sullen', 'strength', 'strong', 'stupefied', 'stuporous', 'stunned', 'sultry', 'sunny', 'suspicious', 'tender', 'tense', 'thankful', 'thoughtful', 'tired', 'torpid', 'torture', 'traumatized', 'upset', 'uptight', 'victorious', 'wistful', 'woebegone', 'woeful', 'wonderful', 'worried', 'yearning', 'zealous', 'agonized', 'agog', 'apprehensive', 'arrogance', 'bashful',
+                    'bored', 'brave', 'chagrin', 'cheerful', 'chic', 'chivalrous', 'combative', 'complacent', 'conceited', 'confident', 'cranky', 'deceitful', 'defeated', 'defiant', 'delightful', 'derisive', 'desperate', 'determined', 'disdainful', 'distraught', 'distraught', 'dreamy', 'eerie', 'euphoric', 'exasperated', 'exhilarated', 'fractious', 'frantic', 'gallant', 'giddy', 'glum', 'grieving', 'haughty', 'heartfelt', 'heuristic', 'hopeless', 'hungry', 'hurt', 'impartial', 'insecure', 'insolent', 'intrigued', 'irritable', 'jealous', 'jittery', 'jovial', 'keen', 'lethargic', 'listless', 'lively', 'longing', 'loquacious', 'loving', 'melancholy',
+                    'merry', 'mournful', 'naive', 'needy', 'nervous', 'nostalgic', 'oblivious', 'outraged', 'panicked', 'passionate', 'perturbed', 'pessimistic', 'piqued', 'placid', 'quarrelsome', 'queasy', 'querulous', 'restless', 'sad', 'sassy', 'satisfied', 'saucy', 'savory', 'scornful', 'sensitive', 'serious', 'serene', 'silly', 'sleepy', 'sore', 'sorrowful', 'soulful', 'spirited', 'spiteful', 'splendid', 'sullen', 'sore', 'strong', 'stupefied', 'sulky', 'sunny', 'suspicious', 'tense', 'thankful', 'thirsty', 'thoughtful', 'tired', 'torpid', 'traumatized', 'upset', 'uptight', 'victorious', 'wistful', 'woebegone', 'woeful', 'wonderful', 'worried', 'yearning', 'zealous', 'zesty'
+                ],
+
+                occupations: [
+                    'doctor', 'engineer', 'teacher', 'artist', 'chef', 'lawyer', 'nurse', 'programmer', 'pilot', 'dentist', 'architect', 'accountant', 'author', 'athlete', 'actor', 'actress', 'animator', 'app developer', 'artist', 'astronaut', 'audio engineer', 'ballerina', 'baker', 'barista', 'bartender', 'biologist', 'broadcaster', 'builder', 'business analyst', 'butcher', 'carpenter', 'celebrity', 'chemist', 'choreographer', 'cinema operator', 'coach', 'comedian', 'computer scientist', 'consultant', 'cosmetologist', 'counselor', 'craft artist', 'criminal investigator', 'curator', 'customs officer', 'dancer', 'data analyst',
+                    'database administrator', 'dietitian', 'director', 'diplomat', 'dispatcher', 'drama teacher', 'driver', 'economist', 'electrician', 'editor', 'electrical engineer', 'emergency medical technician', 'engineer', 'entreprenuer', 'fashion designer', 'financial analyst', 'firefighter', 'fisherman', 'fitness instructor', 'flight attendant', 'gardener', 'general manager', 'geologist', 'graphic designer', 'groundskeeper', 'hairdresser', 'historian', 'hotel manager', 'illustrator', 'industrial designer', 'information technology specialist', 'interior designer', 'inventor', 'journalist', 'judge', 'landscape architect',
+                    'librarian', 'lifeguard', 'logistics manager', 'makeup artist', 'manager', 'marine biologist', 'marketing specialist', 'masseuse', 'mathematician', 'mechanic', 'media planner', 'medical researcher', 'meteorologist', 'microbiologist', 'musician', 'nutritionist', 'nurse practitioner', 'occupational therapist', 'office administrator', 'optician', 'orthodontist', 'painter', 'paralegal', 'pathologist', 'patternmaker', 'personal assistant', 'personal trainer', 'petroleum engineer', 'pharmacist', 'photographer', 'physician assistant', 'physicist', 'podiatrist', 'political scientist', 'private investigator', 'producer', 'professor', 'project manager', 'psychologist', 'public relations specialist', 'publisher', 'real estate agent', 'recruiter', 'research assistant', 'research scientist', 'restauranteur', 'sales representative', 'scientist', 'screenwriter', 'sculptor', 'seamstress', 'security guard', 'social media manager', 'social worker', 'software engineer', 'sound engineer', 'special education teacher', 'speech therapist', 'statistician', 'surveyor', 'surgeon', 'systems analyst', 'taxi driver', 'teacher', 'technical writer', 'therapist', 'tour guide', 'trainer', 'translator', 'travel agent', 'truck driver', 'TV host', 'ultrasonographer', 'veterinarian', 'video editor', 'vintner', 'web developer', 'writer', 'zoologist', 'acupuncturist', 'aerospace engineer', 'agricultural scientist', 'air traffic controller', 'amusement park worker', 'anthropologist', 'archivist', 'army officer', 'art appraiser', 'art therapist', 'artistic director', 'astrology consultant', 'athletic director', 'auctioneer', 'audio technician', 'aviation inspector', 'baggage handler', 'bailiff', 'baker', 'banker', 'barber', 'bartender', 'beautician', 'behavioral scientist', 'bicycle mechanic', 'bill collector', 'biochemist', 'biophysicist', 'bookkeeper', 'botanist', 'brand manager', 'broadcast technician', 'budget analyst', 'bus driver', 'business consultant', 'butler', 'buyer', 'cabinet maker', 'call center supervisor', 'camera operator', 'cardiologist', 'cargo agent', 'cashier', 'carol singer', 'carpenter', 'cartographer', 'cash manager', 'ceramic engineer', 'chauffeur', 'chef', 'childcare worker', 'chiropractor', 'church administrator', 'cinema manager', 'claims adjuster', 'clinical psychologist', 'clothing designer', 'coach', 'coal miner', 'cognitive psychologist', 'commercial artist', 'comptroller', 'construction estimator', 'content writer', 'copywriter', 'coroner', 'cosmetic dentist', 'cosmic scientist', 'costume designer', 'counselor', 'court clerk', 'craft artist', 'crane operator', 'credit analyst', 'criminal investigator', 'cross-cultural consultant', 'curriculum developer', 'custodian', 'customs inspector', 'cybersecurity expert', 'dairy farmer', 'dance therapist', 'database administrator', 'deaf educator', 'dental assistant', 'dermatologist', 'desktop publisher', 'detective', 'dietitian', 'digital illustrator', 'diplomat', 'director', 'disability services director', 'dispatcher', 'diversity officer', 'drilling engineer', 'early childhood teacher', 'earth scientist', 'economist', 'education consultant', 'electrical engineer', 'embalmer', 'emergency management director', 'energy engineer', 'engineer', 'English as a foreign language teacher', 'environmental engineer', 'environmental scientist', 'ergonomist', 'etymologist', 'event planner', 'exhibit designer', 'family therapist', 'fashion buyer', 'fashion model', 'fashion photographer', 'fast food cook', 'field service technician', 'file clerk', 'financial analyst', 'financial planner', 'fine artist', 'firefighter', 'fish and game warden', 'fitness director', 'flight engineer', 'floor supervisor', 'fluorescent lamp technician', 'food chemist', 'food critic', 'food scientist', 'forensic accountant', 'forensic psychologist', 'forester', 'freight agent', 'front desk clerk', 'funeral director', 'fundraiser', 'game designer', 'garment worker', 'gas station attendant', 'general contractor', 'geodesist', 'geographer', 'geologist', 'gis technician', 'glass blower', 'golf course superintendent', 'graphic designer', 'groundskeeper', 'gynecologist', 'hairdresser', 'halal butcher', 'hand therapist', 'hazardous waste collector', 'healthcare administrator', 'healthcare consultant', 'hearing officer', 'heating and cooling technician', 'high school teacher', 'historian', 'home appraiser', 'home economist', 'homeland security officer', 'horticulturist', 'hospitalist', 'hotel concierge', 'housekeeping supervisor', 'human factors engineer', 'human resources assistant', 'hunter', 'illustrator', 'industrial engineer', 'industrial hygienist', 'information officer', 'insulation worker', 'insurance adjuster', 'insurance agent', 'interior designer', 'interpreter', 'investor relations',
+                    'janitor', 'jeweler', 'journalist', 'judge', 'landscape architect', 'lathe operator', 'lawyer', 'layout worker', 'legal assistant', 'librarian', 'licensed practical nurse', 'life coach', 'lighting technician', 'loan officer', 'lobbyist', 'location scout', 'logistics analyst', 'machine operator', 'magazine editor', 'maintenance worker', 'management analyst', 'management consultant', 'manicurist'],
+
+                countries: [
+                    'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria', 'Azerbaijan',
+                    'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina',
+                    'Botswana', 'Brazil', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Cabo Verde', 'Cambodia', 'Cameroon', 'Canada', 'Central African Republic',
+                    'Chad', 'Chile', 'China', 'Colombia', 'Comoros', 'Congo, Democratic Republic of the', 'Congo, Republic of the', 'Costa Rica', "Côte d'Ivoire",
+                    'Croatia', 'Cuba', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'East Timor (Timor-Leste)', 'Ecuador',
+                    'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Eswatini (Swaziland)', 'Ethiopia', 'Fiji', 'Finland', 'France',
+                    'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada', 'Guatemala', 'Guinea', 'Guinea-Bissau', 'Guyana',
+                    'Haiti', 'Honduras', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy',
+                    'Jamaica', 'Japan', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 'Kuwait', 'Kyrgyzstan', 'Laos', 'Latvia', 'Lebanon',
+                    'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali',
+                    'Malta', 'Marshall Islands', 'Mauritania', 'Mauritius', 'Mexico', 'Micronesia', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Morocco',
+                    'Mozambique', 'Myanmar (Burma)', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'North Korea',
+                    'North Macedonia', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Poland',
+                    'Portugal', 'Qatar', 'Romania', 'Russia', 'Rwanda', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines', 'Samoa', 'San Marino',
+                    'Sao Tome and Principe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia', 'Slovenia', 'Solomon Islands',
+                    'Somalia', 'South Africa', 'South Korea', 'South Sudan', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname', 'Sweden', 'Switzerland', 'Syria',
+                    'Tajikistan', 'Tanzania', 'Thailand', 'Togo', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Tuvalu',
+                    'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States of America', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City',
+                    'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe', 'Palestine', 'Western Sahara', 'Serbia and Montenegro (Historic)', 'Svalbard', 'Jan Mayen',
+                    'Åland Islands', 'British Indian Ocean Territory', 'Christmas Island', 'Cocos (Keeling) Islands', 'Cook Islands', 'Falkland Islands (Islas Malvinas)',
+                    'French Southern Territories', 'Guernsey', 'Isle of Man', 'Jersey', 'Montserrat', 'Niue', 'Norfolk Island', 'Northern Mariana Islands',
+                    'Pitcairn Islands', 'Saint Barthélemy', 'Saint Helena', 'Saint Martin', 'South Georgia and the South Sandwich Islands', 'Turks and Caicos Islands',
+                    'United States Minor Outlying Islands', 'Virgin Islands (British)', 'Virgin Islands (U.S.)', 'Wallis and Futuna Islands'
+                ],
+                mythology: [
+                    'Zeus', 'Thor', 'Hercules', 'Odin', 'Athena', 'Poseidon', 'Loki', 'Anubis', 'Isis', 'Ra', 'Horus', 'Bastet', 'Thoth', 'Aphrodite',
+                    'Ares', 'Apollo', 'Artemis', 'Demeter', 'Hestia', 'Hephaestus', 'Hermes', 'Persephone', 'Pluto', 'Proserpina', 'Cupid', 'Diana', 'Vulcan',
+                    'Njord', 'Freyr', 'Freya', 'Baldr', 'Sif', 'Thor', 'Tyr', 'Frigg', 'Jotun', 'Mimir', 'Bragi', 'Hel', 'Surtr', 'Nidhogg', 'Garmr',
+                    'Yggdrasil', 'Valkyries', 'Einherjar', 'Mjolnir', 'Odin', 'Sif', 'Fenrir', 'Midgard', 'Asgard', 'Vanir', 'Aesir', 'Dwarf', 'Elf', 'Giant',
+                    'Krishna', 'Vishnu', 'Shiva', 'Lakshmi', 'Sarasvati', 'Ganesha', 'Indra', 'Rama', 'Hanuman', 'Garuda', 'Yama', 'Parvati', 'Brahma',
+                    'Surya', 'Chandra', 'Styx', 'Achilles', 'Odysseus', 'Helen of Troy', 'Medusa', 'Minotaur', 'Cerberus', 'Pegasus', 'Centaur', 'Satyr',
+                    'Nereid', 'Dryad', 'Lamia', 'Pan', 'Morpheus', 'Icarus', 'Daedalus', 'Athena', 'Adonis', 'Hebe', 'Nemesis', 'Eros', 'Graces', 'Fates',
+                    'Moirai', 'Hecate', 'Priapus', 'Ariadne', 'Theseus', 'Io', 'Dionysus', 'Metis', 'Erebus', 'Nyx', 'Selene', 'Coatlicue', 'Quetzalcoatl',
+                    'Tlaloc', 'Huitzilopochtli', 'Ometeotl', 'Xipe Totec', 'Tezcatlipoca', 'Quirinus', 'Vesta', 'Flora', 'Faunus', 'Fauna'],
+                science: [
+                    'atom', 'molecule', 'gravity', 'evolution', 'photosynthesis', 'cell', 'DNA', 'natural selection', 'genome', 'neuron', 'organism',
+                    'element', 'compound', 'periodic table', 'atom', 'molecule', 'nucleus', 'electron', 'proton', 'neutron', 'quark', 'lepton',
+                    'boson', 'fermion', 'photon', 'hadron', 'gluton', 'Higgs boson', 'string', 'brane', 'quantum mechanics', 'wave function',
+                    'superposition', 'entanglement', 'uncertainty principle', 'Einstein', 'Newton', 'Darwin', 'Copernicus', 'Pasteur', 'Curie',
+                    'Hawking', 'E=mc^2', 'F=ma', 'cell theory', 'big bang theory', 'theory of relativity', 'natural selection',
+                    'continental drift', 'plate tectonics', 'global warming', 'climate change', 'photosynthesis', 'respiration', 'mitosis', 'meiosis',
+                    'adaptation', 'inheritance', 'genetics', 'mutation', 'reproduction', 'recessive', 'dominant', 'trait', 'protein', 'enzyme',
+                    'ribosome', 'chloroplast', 'lysosome', 'Golgi apparatus', 'endoplasmic reticulum', 'nucleolus', 'cell membrane', 'cytoplasm',
+                    'algebra', 'geometry', 'calculus', 'statistics', 'trigonometry', 'differential equation', 'vector', 'matrix', 'tensor', 'complex number',
+                    'fractal', 'topology', 'algorithm', 'computer science', 'artificial intelligence', 'machine learning', 'neural network', 'deep learning',
+                    'data science', 'cybernetics', 'informatics', 'biotechnology', 'genetic engineering', 'nanotechnology', 'quantum computing',
+                    'theoretical physics', 'astrophysics', 'cosmology', 'particle physics', 'nuclear physics', 'optical physics', 'quantum field theory',
+                    'thermodynamics', 'kinetics', 'mechanical engineering', 'civil engineering', 'electrical engineering', 'software engineering',
+                    'materials science', 'chemistry', 'inorganic chemistry', 'organic chemistry', 'physical chemistry', 'biochemistry', 'neuroscience',
+                    'psychology', 'sociology', 'anthropology', 'geography', 'geology', 'mineralogy', 'meteorology', 'oceanography', 'ecology',
+                    'zoology', 'botany', 'paleontology', 'physiology', 'immunology', 'pathology', 'pharmacology', 'toxicology', 'endocrinology',
+                    'gastroenterology', 'cardiology', 'nephrology', 'hematology', 'oncology', 'pediatrics', 'geriatrics', 'epidemiology', 'dermatology',
+                    'radiology', 'urology', 'gynecology', 'ophthalmology', 'orthopedics', 'neurology', 'psychiatry', 'anesthesiology', 'surgery',
+                    'obstetrics', 'gastroenterology', 'allergy', 'immunology', 'infectious disease', 'parasitology', 'virology', 'bacteriology',
+                    'bioinformatics', 'systems biology', 'molecular biology', 'genomics', 'proteomics', 'metabolomics', 'transcriptomics', 'ecotoxicology',
+                    'conservation biology', 'ethology', 'behavioral ecology', 'population biology', 'taxonomy', 'speciation', 'extinction', 'speciation',
+                    'biodiversity', 'ecosystem', 'habitat', 'endangered species', 'sustainable development', 'renewable energy', 'environmental science',
+                    'geocentric', 'heliocentric', 'parallax', 'astrometry', 'astrobiology', 'cosmogony', 'cosmology', 'exoplanets', 'astrophysics'
+                ]
+            },
+            creative: {
+                fantasy: [
+                    'dragon', 'wizard', 'elf', 'orc', 'goblin', 'unicorn', 'dwarf', 'troll', 'giant', 'knight', 'fairy', 'vampire', 'werewolf',
+                    'zombie', 'skeleton', 'ghoul', 'genie', 'nymph', 'centaur', 'mermaid', 'merman', 'phoenix', 'griffin', 'hydra', 'cockatrice',
+                    'pegasus', 'chimera', 'sphinx', 'minotaur', 'cyclops', 'medusa', 'siren', 'dryad', 'basilisk', 'wraith', 'ogre', 'hag', 'gargoyle',
+                    'imp', 'kobold', 'pixie', 'brownie', 'sprite', 'hobgoblin', 'bugbear', ' banshee', 'gnome', 'halfling', 'ent', 'naga', 'harpy',
+                    'roc', 'elemental', 'air', 'earth', 'fire', 'water', 'spirit', 'demon', 'angel', 'devil', 'fiend', 'incubus', 'succubus', 'ogre',
+                    'giant', 'titan', 'colossus', 'behemoth', 'leviathan', 'manticore', 'alchemist', 'enchanter', 'conjurer', 'diviner', 'illusionist',
+                    'summoner', 'warlock', 'sorcerer', 'mage', 'witch', 'wizard', 'druid', 'shaman', 'cleric', 'paladin', 'ranger', 'barbarian',
+                    'fighter', 'monk', 'rogue', 'assassin', 'necromancer', 'warrior', 'champion', 'guardian', 'sniper', 'archer', 'hunter', 'scout',
+                    'berserker', 'samurai', 'ninja', 'knight', 'cavalier', 'plainswalker', 'avatar', 'lich', 'crab', 'crystal', 'cube', 'dart', 'disk',
+                    'eye', 'flag', 'flower', 'gem', 'hand', 'hat', 'hourglass', 'key', 'lantern', 'lightning', 'mirror', 'orb', 'pillar', 'portal',
+                    'pyramid', 'ring', 'shield', 'sign', 'staff', 'stone', 'sword', 'telescope', 'wand', 'wheel', 'wing', 'amulet', 'axe', 'blade',
+                    'blood', 'bone', 'book', 'bow', 'cloak', 'crown', 'eagle', 'feather', 'flame', 'fog', 'frost', 'gate', 'ghost', 'hammer', 'helmet',
+                    'horn', 'ice', 'mask', 'moon', 'mountain', 'palm', 'pearl', 'potion', 'quill', 'rose', 'scale', 'shadow', 'shield', 'skull', 'smoke',
+                    'snow', 'star', 'steel', 'storm', 'sun', 'tail', 'tear', 'thorn', 'time', 'tower', 'tree', 'trident', 'tunnel', 'vortex', 'web',
+                    'wind', 'wolf', 'wood', 'wyrm', 'amulet of invisibility', 'cloak of darkness', 'gauntlets of ogre power', 'helm of brilliance',
+                    'shield of the dungeon', 'sword of truth', 'wand of wonder', 'orb of mystery', 'amulet of might', 'belt of giant strength',
+                    'boots of speed', 'bracers of archery', 'circlet of lordship', 'gauntlets of ogre power', 'hat of vertex', 'mask of the skull',
+                    'robes of the archmagi', 'slippers of spider climbing', 'tome of clear thought', 'wand of the war mage', 'amulet of natural armor',
+                    'cloak of displacement', 'dagger of venom', 'gauntlets of righteousness', 'helm of teleportation', 'shield of invincibility',
+                    'sword of sharpness', 'wand of the moon', 'orb of dragonkind', 'amulet of proof against detection', 'belt of cloud giant strength',
+                    'boots of levitation', 'broadsword of sharpness', 'circlet of flowing hair', 'gauntlets of boundless power', 'helm of brilliance',
+                    'shield of missile attraction', 'sword of the parun', 'wand of the sea', 'orb of souls', 'amulet of undying', 'cloak of arachnida',
+                    'dagger of compounding', 'gauntlets of ghost touch', 'helm of comprehension', 'shield of psychic protection', 'sword of the planes',
+                    'wand of the star soul', 'amulet of mighty fists', 'cloak of the manta ray', 'dagger of wounding',
+                    'gauntlets of ogre power', 'helm of telepathy', 'shield of the waves', 'sword of chaos', 'wand of binding'
+                ],
+                sciFi: [
+                    'spaceship', 'alien', 'cyborg', 'laser', 'planet', 'robot', 'AI', 'artificial intelligence', 'time travel', 'wormhole', 'galactic empire',
+                    'terraforming', 'space station', 'asteroid', 'black hole', 'quantum computer', 'nanotechnology', 'parallel universe', 'android', 'droid',
+                    'holodeck', 'hyperspace', 'warp drive', 'teleportation', 'space elevator', 'death star', 'light saber', 'space odyssey', 'terraform',
+                    'exoplanet', 'interstellar travel', 'singularity', 'space marine', 'infinite universe', 'terraforming', 'space exploration', 'galactic war',
+                    'quantum leap', 'space colony', 'intergalactic', 'space pirate', 'bionic', 'bioengineering', 'faster than light', 'FTL', 'robotic',
+                    'replicant', 'clone', 'cryogenics', 'stasis', 'space suit', 'orbital', 'galaxy', 'cosmic', 'astroid', 'nebula', 'interstellar',
+                    'spacetime', 'quantum field', 'singularity', 'event horizon', 'quantum entanglement', 'space dock', 'gravity well', 'astrophysics',
+                    'cosmology', 'space debris', 'cosmic ray', 'spaceport', 'g force', 'hyperdrive', 'jump gate', 'space junk', 'orbiter', 'ion thruster',
+                    'plasma', 'fusion', 'antimatter', 'dark matter', 'dark energy', 'nanites', 'singularity', 'exobiology', 'astrochemist', 'space probe',
+                    'robotics', 'artificial gravity', 'cybernetics', 'hibernation', 'life support', 'space habitat', 'terraforming', 'space fence', 'laser cannon',
+                    'ray gun', 'pulse rifle', 'disruptor', 'phasor', 'tachyon', 'tractor beam', 'repulsor', 'death ray', 'laser blaster', 'plasma caster',
+                    'laser sword', 'plasma shield', 'energy shield', 'deflector shield', 'cloaking device', 'invisibility', ' transporter', 'hypersleep',
+                    'stasis field', 'chrono', 'chronostatic', 'chronokinetic', 'chronopsychic', 'chronoshift', 'chronoflux', 'chronopulse', 'chronovortex',
+                    'chronosynchronicity', 'chronostasis', 'chronotransmission', 'chronomodulation', 'chronostasis', 'chronostasis', 'chronostrobe',
+                    'chronoslip', 'chronoflux', 'chronovortex', 'chronopulse', 'chronosynchronicity', 'chronoshift', 'chronolock', 'chronocast',
+                    'chronoport', 'chronosight', 'chronosieve', 'chronosoma', 'chronoswarm', 'chronosplice', 'chronosplice', 'chronosift', 'chronosift',
+                    'chronosight', 'chronosieve', 'chronosoma', 'chronoswarm', 'chronosplice', 'time loop', 'time paradox', 'time dilation', 'time dilation',
+                    'chronobutton', 'chronocast', 'chronoflux', 'chronomodulation', 'chronolock', 'chronoslip', 'chronoflux', 'chronovortex', 'chronopulse',
+                    'chronosynchronicity', 'chronoshift', 'time dilation', 'time loop', 'time paradox', 'chronobutton', 'chronocast', 'chronoflux',
+                    'chronolock', 'chronoslip', 'chronovortex', 'chronopulse', 'chronosynchronicity', 'chronoshift', 'space force', 'space fleet',
+                    'space army', 'space corps', 'space defense', 'space shield', 'space barrier', 'space wall', 'space dome', 'space curtain', 'space gate',
+                    'space fence', 'space guard', 'space watch', 'space patrol', 'space sentinel', 'space frontier', 'space zone', 'space belt', 'space ring',
+                    'space loop', 'space arc', 'space sphere', 'space grid', 'space web', 'space net', 'space lattice', 'space matrix', 'space fabric',
+                    'space texture', 'space weave', 'space mesh', 'space veil', 'space film', 'space sheath', 'space layer', 'space sheen', 'space patina',
+                    'space gloss', 'space sheen', 'space polish', 'space veneer', 'space lacquer', 'space glaze', 'space enamel', 'space varnish', 'space coating',
+                    'space finish', 'space hue', 'space tint', 'space shade', 'space tone', 'space dye', 'space wash', 'space blend', 'space gradient',
+                    'space spectrum', 'space chroma', 'space shade', 'space tone', 'space dye', 'space wash', 'space blend', 'space gradient', 'space spectrum',
+                    'space chroma', 'space cruiser', 'space frigate', 'space destroyer', 'space battleship', 'space carrier', 'space dreadnought', 'space flagship',
+                    'space yacht', 'space tug', 'space barge', 'space hauler', 'space freighter', 'space liner', 'space clipper', 'space schooner', 'space galleon'
+                ],
+
+                idioms: [
+                    'break a leg', 'hit the sack', 'piece of cake', 'under the weather', 'spill the beans', 'let the cat out of the bag', 'a wolf in sheep\’s clothing', 'when pigs fly', 'the ball is in your court', 'add insult to injury', 'bark up the wrong tree',
+                    'bite the bullet', 'the real McCoy', 'hit the nail on the head', 'don\'t count your chickens', 'burn the midnight oil', 'the writing is on the wall', 'let the grass grow under one\’s feet', 'cat got your tongue', 'over the moon', 'break the ice',
+                    'the early bird catches the worm', 'you can\'t judge a book by its cover', 'every cloud has a silver lining', 'a picture is worth a thousand words', 'oil and water', 'don\'t look a gift horse in the mouth', 'a fish out of water', 'get out of hand', 'turn over a new leaf',
+                    'hold your horses', 'the pot calling the kettle black', 'out of the frying pan into the fire', 'a bird in the hand is worth two in the bush', 'a storm in a teacup', 'bite off more than one can chew', 'the calm before the storm', 'cross the Rubicon', 'cry over spilt milk',
+                    'cut the mustard', 'a bolt from the blue', 'the apple of one\’s eye', 'down the hatch', 'the last straw', 'a bitter pill to swallow', 'a bed of roses', 'a snake in the grass', 'the elephant in the room', 'rob Peter to pay Paul',
+                    'have a skeleton in the closet', 'don\'t put all your eggs in one basket', 'a penny for your thoughts', 'a hard nut to crack', 'a red-letter day', 'a shot in the dark', 'a wet blanket', 'a wild card', 'a bitter pill', 'a bad apple',
+                    'a sore thumb', 'a green thumb', 'a smooth sail', 'a shot in the arm', 'a bittersweet moment', 'a flash in the pan', 'a square peg in a round hole', 'a tall order', 'a sticky situation', 'a thin line',
+                    'a piece of the pie', 'a wild goose chase', 'a drop in the bucket', 'a voice of reason', 'a wolf in sheep\’s clothing', 'a shot in the dark', 'a tough act to follow', 'a trial run', 'a wake-up call', 'a fast one',
+                    'a hard nut to crack', 'a bittersweet moment', 'a flash in the pan', 'a square peg in a round hole', 'a tall order', 'a sticky situation', 'a thin line', 'a piece of the pie', 'a wild goose chase', 'a drop in the bucket',
+                    'a voice of reason', 'a wolf in sheep\’s clothing', 'a shot in the dark', 'a tough act to follow', 'a trial run', 'a wake-up call', 'a fast one', 'a hard nut to crack', 'a bittersweet moment', 'a flash in the pan',
+                    'a square peg in a round hole', 'a tall order', 'a sticky situation', 'a thin line', 'a piece of the pie', 'a wild goose chase', 'a drop in the bucket', 'a voice of reason', 'a wolf in sheep\’s clothing',
+                    'a nail in the coffin', 'a feather in one\’s cap', 'a pain in the neck', 'a slap in the face', 'a shot in the arm', 'a smoke and mirrors', 'a spanner in the works', 'a straight shooter', 'a wild card', 'a wet blanket',
+                    'a bumpy ride', 'a can of worms', 'a dark horse', 'a foot in the door', 'a free ticket', 'a hard nut to crack', 'a hot potato', 'a loose cannon', 'a lucky break', 'a one-horse town',
+                    'a pain in the neck', 'a piece of cake', 'a shot in the dark', 'a slap on the wrist', 'a smokescreen', 'a still waters', 'a tough act to follow', 'a trial by fire', 'a voice in the wilderness', 'a wolf in sheep\’s clothing',
+                    'a storm in a teacup', 'a tall order', 'a thorn in someone\’s side', 'a trial run', 'a wake-up call', 'a wild goose chase', 'a word in due season', 'a bait and switch', 'a bolt from the blue', 'a bitter pill to swallow',
+                    'a cat and dog life', 'a clean slate', 'a dark horse', 'a drop in the ocean', 'a flash in the pan', 'a hard nut to crack', 'a house of cards', 'a law unto oneself', 'a leap in the dark', 'a mixed bag',
+                    'a piece of cake', 'a shot in the dark', 'a slap on the wrist', 'a smokescreen', 'a still waters', 'a tough act to follow', 'a trial by fire', 'a voice in the wilderness', 'a wolf in sheep\’s clothing', 'a storm in a teacup',
+                    'a tall order', 'a thorn in someone\’s side', 'a trial run', 'a wake-up call', 'a wild goose chase', 'a word in due season', 'a bait and switch', 'a bolt from the blue', 'a bitter pill to swallow', 'a cat and dog life',
+                    'a clean slate', 'a dark horse', 'a drop in the ocean', 'a flash in the pan', 'a hard nut to crack', 'a house of cards', 'a law unto oneself', 'a leap in the dark', 'a mixed bag'
+                ]
+            },
+
+
+
+            frequency: {
+                common: [
+                    'the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'I', 'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you', 'do',
+                    'at', 'this', 'but', 'his', 'by', 'from', 'they', 'we', 'say', 'her', 'she', 'or', 'an', 'will', 'my', 'one', 'all', 'would',
+                    'there', 'their', 'what', 'so', 'up', 'out', 'if', 'about', 'who', 'get', 'which', 'go', 'me', 'when', 'make', 'can', 'like',
+                    'time', 'no', 'just', 'him', 'know', 'take', 'person', 'into', 'year', 'your', 'good', 'some', 'could', 'them', 'see', 'other',
+                    'than', 'then', 'now', 'look', 'only', 'come', 'its', 'over', 'think', 'also', 'back', 'after', 'use', 'two', 'how', 'our', 'work',
+                    'first', 'well', 'way', 'even', 'new', 'want', 'because', 'any', 'these', 'give', 'day', 'most', 'us', 'such', 'no', 'give',
+                    'many', 'more', 'those', 'these', 'only', 'people', 'while', 'help', 'where', 'line', 'after', 'been', 'before', 'door', 'down',
+                    'through', 'each', 'found', 'which', 'between', 'being', 'from', 'into', 'like', 'life', 'still', 'use', 'much', 'between',
+                    'form', 'over', 'old', 'part', 'left', 'end', 'put', 'place', 'hand', 'own', 'great', 'same', 'another', 'view', 'public', 'way',
+                    'fact', 'example', 'case', 'point', 'home', 'where', 'water', 'thing', 'long', 'man', 'mother', 'area', 'father', 'head', 'should',
+                    'government', 'world', 'three', 'did', 'need', 'little', 'feel', 'system', 'interest', 'body', 'power', 'country', 'school', 'big',
+                    'different', 'important', 'group', 'turn', 'kind', 'own', 'way', 'however', 'family', 'until', 'write', 'number', 'service',
+                    'try', 'call', 'social', 'process', 'even', 'ever', 'look', 'thus', 'move', 'American', 'really', 'general', 'she', 'Mr', 'act',
+                    'fact', 'case', 'study', 'seem', 'last', 'week', 'mother', 'father', 'sister', 'brother', 'wife', 'husband', 'child', 'school',
+                    'state', 'company', 'world', 'area', 'industry', 'department', 'program', 'offee', 'while', 'whole', 'office', 'until', 'note',
+                    'long', 'research', 'point', 'order', 'paper', 'practice', 'problem', 'experience', 'plan', 'hour', 'record', 'office', 'word',
+                    'event', 'before', 'cost', 'business', 'often', 'next', 'without', 'leave', 'office', 'since', 'provide', 'change', 'course',
+                    'seem', 'check', 'profit', 'before', 'run', 'early', 'product', 'local', 'money', 'food', 'minute', 'moment', 'table', 'young',
+                    'care', 'almost', 'data', 'move', 'point', 'today', 'include', 'center', 'man', 'woman', 'person', 'camera', 'end', 'student',
+                    'until', 'teacher', 'hour', 'sit', 'stand', 'boy', 'girl', 'add', 'build', 'cut', 'copy', 'draw', 'hang', 'keep', 'make',
+                    'place', 'throw', 'catch', 'pick', 'show', 'tear', 'wear', 'pay', 'create', 'drive', 'eat', 'fall', 'find', 'get', 'hold',
+                    'lie', 'match', 'meet', 'play', 'run', 'sleep', 'train', 'visit', 'walk', 'work', 'write'
+                ],
+                rare: [
+                    'quixotic', 'serendipity', 'ephemeral', 'limerence', 'sonder', 'lachrymose', 'obfuscate', 'perspicacious', 'lugubrious', 'pusillanimous', 'quagmire',
+                    'redolent', 'antediluvian', 'archaic', 'crystalline', 'effervescent', 'florescent', 'fulminate', 'gnomon', 'heterogeneous', 'indefatigable', 'juxtapose',
+                    'ketosis', 'lissome', 'mercurial', 'nix', 'oblivious', 'paradigm', 'quixotic', 'reciprocal', 'serendipity', 'subliminal', 'topaz',
+                    'umbrage', 'vacillate', 'wistful', 'xylophone', 'yoke', 'zealous', 'arboretum', 'bivouac', 'cachexia', 'demure', 'enervate', 'flabbergast',
+                    'gossamer', 'halcyon', 'igneous', 'jettison', 'knack', 'labyrinthine', 'mellifluous', 'nirvana', 'obstreperous', 'parsimonious', 'quell',
+                    'refractory', 'sepulchral', 'tumescent', 'umbrage', 'velocitous', 'wistful', 'xenon', 'yarrow', 'zephyr', 'arugula', 'blissful',
+                    'calumny', 'deft', 'efflorescence', 'gallivant', 'horticulturist', 'ignominious', 'jingoism', 'knotty', 'lissom', 'mellifluous', 'nix',
+                    'oscillate', 'peregrinate', 'quiescent', 'recusant', 'sepulchre', 'thermometer', 'ululate', 'vacuous', 'waggish', 'xylophone', 'yonder',
+                    'zest', 'arable', 'blithesome', 'cajole', 'defenestrate', 'engender', 'flotsam', 'gibbous', 'hortative', 'igneous', 'jape',
+                    'kowtow', 'lummox', 'metatarsal', 'nirvanic', 'obloquy', 'percipient', 'quaestuary', 'refulgent', 'sepulture', 'thermodynamics', 'umbel',
+                    'vellum', 'welter', 'xenograft', 'yttrium', 'zibeline', 'arbiter', 'bivouac', 'cache', 'demur', 'epiphany', 'flaunt',
+                    'gnomon', 'heterodoxy', 'igneous', 'jactitation', 'kowtow', 'lissome', 'meticulous', 'nirvana', 'obloquy', 'percolate',
+                    'quintessential', 'recusancy', 'sere', 'threnody', 'ululate', 'vacillate', 'wheedle', 'xerostomia', 'yeoman', 'zestful',
+                    'arboreal', 'bloviate', 'convivial', 'deft', 'epithet', 'flotsam', 'gnomon', 'heuristic', 'igneous', 'jingoist',
+                    'kudos', 'lummox', 'metonymy', 'nirvana', 'obfuscate', 'percipient', 'quintessence', 'refulgence', 'serendipitous', 'threnody',
+                    'ululation', 'vacuous', 'wheedle', 'xerostomia', 'yeoman', 'zephyr', 'arboretum', 'bliss', 'convivial', 'defenestration',
+                    'epithetical', 'flotsam', 'gossamer', 'heuristic', 'igneous', 'jingoist', 'kowtow', 'lissom', 'metonymy', 'nirvanic',
+                    'obfuscation', 'percolate', 'quintessential', 'refulgent', 'serendipity', 'threnody', 'ululation', 'vacuous', 'wheedle',
+                    'xerostomia', 'yeoman', 'zestful', 'archaic', 'bloviate', 'conviviality', 'delineate', 'epithetical', 'fluctuate',
+                    'gossamer', 'heuristic', 'igneous', 'jingoism', 'kowtow', 'lissome', 'meticulous', 'nirvana', 'obloquy', 'percipient',
+                    'quintessence', 'refractory', 'serendipity', 'threnody', 'ululate', 'vacillate', 'wheedle', 'xenograft', 'yeoman', 'zestful'
+                ]
+            }
+        };
+
+        const categorySelect = document.getElementById('category');
+        const subcategorySelect = document.getElementById('subcategory');
+        const numWordsInput = document.getElementById('numWords');
+        const outputInput = document.getElementById('output');
+
+        // Populate subcategories based on selected category
+        function populateSubcategories() {
+            const selectedCategory = categorySelect.value;
+            const subcategories = wordData[selectedCategory];
+            subcategorySelect.innerHTML = '';
+
+            for (const subcategory in subcategories) {
+                const option = document.createElement('option');
+                option.value = subcategory;
+                option.textContent = capitalize(subcategory);
+                subcategorySelect.appendChild(option);
+            }
+        }
+
+        // Generate random words
+        function generateRandomWords() {
+            const selectedCategory = categorySelect.value;
+            const selectedSubcategory = subcategorySelect.value;
+            const numWords = parseInt(numWordsInput.value, 10);
+
+            const words = wordData[selectedCategory][selectedSubcategory];
+            const randomWords = [];
+
+            for (let i = 0; i < numWords; i++) {
+                const randomIndex = Math.floor(Math.random() * words.length);
+                randomWords.push(words[randomIndex]);
+            }
+
+            outputInput.value = randomWords.join(', ');
+        }
+
+        // Copy generated words to clipboard
+        function copyToClipboard() {
+            navigator.clipboard.writeText(outputInput.value).then(() => {
+                
+                // 复制成功后，将按钮文本改为'copied'
+                document.getElementById('copyButton').textContent = 'Copied';
+                    // 设置2秒后将按钮文本变回'copy'
+                    setTimeout(() => {
+                        document.getElementById('copyButton').textContent = 'Copy';
+                    }, 2000);
+                
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
             });
-    
-            $('#loadPics').click(function () {
-                loadRandomImages();
-            });
-    
-            $('#copyButton').click(function () {
-                var animalNames = [];
-                $('#pics .animal-name').each(function () {
-                    animalNames.push($(this).text());
-                });
-                var animalNamesText = animalNames.join(', ');
-                navigator.clipboard.writeText(animalNamesText).then(function () {
-                    alert('Copied: ' + animalNamesText);
-                }, function (err) {
-                    console.error('Could not copy text: ', err);
-                });
-            });
-    
-            function loadRandomImages() {
-                var randomImages = [];
-                var imagesLength = animalImages.length;
-                for (var i = 0; i < 6; i++) {
-                    var randomIndex = Math.floor(Math.random() * imagesLength);
-                    var randomImage = animalImages[randomIndex];
-                    if (randomImages.indexOf(randomImage) === -1) {
-                        randomImages.push(randomImage);
-                    } else {
-                        i--; // 如果重复，重新选择
-                    }
-                }
-                displayImages(randomImages);
-            }
-    
-            function displayImages(images) {
-                var html = '';
-                images.forEach(function (image) {
-                    var animalName = image.replace(/_/g, ' '); // 动物名称
-                    var fileName = 'animal//' + image + '.webp'; // 图片文件名
-                    var wikiUrl = 'https://en.wikipedia.org/wiki/' + encodeURIComponent(animalName);
-                    html += '<div class="image-container">' +
-                        '<div class="animal-image" data-wiki-url="' + wikiUrl + '">' +
-                        '<img src="' + fileName + '" alt="' + animalName + '">' +
-                        '</div>' +
-                        '<div class="animal-name">' + animalName + '</div>' +
-                        '</div>';
-                });
-                $('#pics').html(html);
-    
-                // Add click event to open modal with Wikipedia page
-                $('.animal-image').click(function () {
-                    var wikiUrl = $(this).data('wiki-url');
-                    $('#wiki-iframe').attr('src', wikiUrl);
-                    $('#myModal').show();
-                });
-            }
-    
-            // Get the <span> element that closes the modal
-            var span = document.getElementsByClassName("close")[0];
-    
-            // When the user clicks on <span> (x), close the modal
-            span.onclick = function () {
-                $('#myModal').hide();
-            }
-    
-            // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function (event) {
-                if (event.target == document.getElementById("myModal")) {
-                    $('#myModal').hide();
-                }
-            }
-        </script>
-        
-    
-    
+        }
+
+        // Event listeners
+        categorySelect.addEventListener('change', populateSubcategories);
+        document.getElementById('generateButton').addEventListener('click', generateRandomWords);
+        document.getElementById('copyButton').addEventListener('click', copyToClipboard);
+
+        // Initial population of subcategories
+        populateSubcategories();
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+    </script>
+
+
+
+
     <section class="mx-auto my-8 max-w-2xl text-left">
         <h3 class="text-2xl font-bold">Other Features of the Random Generator</h3>
         <ul class="mt-4 text-lg list-disc">
             <li><a href="./random-animal-wheel.html" class="text-blue-500 hover:underline">Random Animal Wheel</a></li>
             <li><a href="./random-animal-name.html" class="text-blue-500 hover:underline">Random Animal Name</a></li>
-            <li><a href="./random-number-generator.html" class="text-blue-500 hover:underline">Random Number Generator</a></li>
-            <li><a href="./random-name-generator.html" class="text-blue-500 hover:underline">Random Name Generator</a></li>
-            <li><a href="./random-word-generator.html" class="text-blue-500 hover:underline">Random Word Generator</a></li>
-            <li><a href="./random-password-generator.html" class="text-blue-500 hover:underline">Random Password Generator</a></li>
-            <li><a href="./random-letter-generator.html" class="text-blue-500 hover:underline">Random Letter Generator</a></li>
-            <li><a href="./random-team-generator.html" class="text-blue-500 hover:underline">Random Team Generator</a></li>
-            <li><a href="./random-color-generator.html" class="text-blue-500 hover:underline">Random Color Generator</a></li>
+            <li><a href="./random-number-generator.html" class="text-blue-500 hover:underline">Random Number
+                    Generator</a></li>
+            <li><a href="./random-name-generator.html" class="text-blue-500 hover:underline">Random Name Generator</a>
+            </li>
+            <li><a href="./random-word-generator.html" class="text-blue-500 hover:underline">Random Word Generator</a>
+            </li>
+            <li><a href="./random-password-generator.html" class="text-blue-500 hover:underline">Random Password
+                    Generator</a></li>
+            <li><a href="./random-letter-generator.html" class="text-blue-500 hover:underline">Random Letter
+                    Generator</a></li>
+            <li><a href="./random-team-generator.html" class="text-blue-500 hover:underline">random Team generator</a>
+            </li>
+            <li><a href="./random-color-generator.html" class="text-blue-500 hover:underline">Random Color Generator</a>
+            </li>
         </ul>
-        
+
     </section>
     <div class="mx-auto my-8 max-w-2xl text-left">
-        <h3 class="text-2xl font-bold">Thank you for helping us improve this tool!</h3>
-        <p class="mt-4 text-lg">We are eager to hear your feedback on the Animal Generator.</p>
+        <h3 class="text-2xl font-bold">Thank you for helping us improve random word generator!</h3>
+        <p class="mt-4 text-lg">We are eager to hear your feedback on the random word generator.</p>
         <a href="https://forms.gle/L3hcskS8YKwXY8Qb6" class="text-blue-500 hover:underline">Submit Feedback</a>
     </div>
     <section class="mx-auto my-8 max-w-2xl text-left">
-        <h3 class="text-2xl font-bold">Share the Random Animal Generator</h3>
+        <h3 class="text-2xl font-bold">Share the random word generator</h3>
         <p class="mt-4 text-lg">
-            If you enjoy using the Random Animal Generator, please help us spread the word by sharing it with your friends and family on social media. Your support helps us reach more people and continue improving the tool!
+            If you enjoy using the random word generator, please help us spread the word by sharing it with your friends
+            and family on social media. Your support helps us reach more people and continue improving the tool!
         </p>
         <div class="mt-4 flex space-x-4">
             <!-- Facebook Share -->
-            <a href="https://www.facebook.com/sharer/sharer.php?u=https://animalgenerator.co" target="_blank" class="text-blue-500 hover:underline flex items-center">
-                <svg class="inline-block h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 8 19">
-                    <path fill-rule="evenodd" d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z" clip-rule="evenodd"/>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://animalgenerator.co" target="_blank"
+                class="text-blue-500 hover:underline flex items-center">
+                <svg class="inline-block h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor" viewBox="0 0 8 19">
+                    <path fill-rule="evenodd"
+                        d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z"
+                        clip-rule="evenodd" />
                 </svg>
                 <span class="ml-2">Facebook</span>
             </a>
-    
+
             <!-- Twitter Share -->
-            <a href="https://twitter.com/intent/tweet?url=https://animalgenerator.co&text=Check%20out%20this%20awesome%20Random%20Animal%20Generator!" target="_blank" class="text-blue-500 hover:underline flex items-center">
-                <svg class="inline-block h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 17">
-                    <path fill-rule="evenodd" d="M20 1.892a8.178 8.178 0 0 1-2.355.635 4.074 4.074 0 0 0 1.8-2.235 8.344 8.344 0 0 1-2.605.98A4.13 4.13 0 0 0 13.85 0a4.068 4.068 0 0 0-4.1 4.038 4 4 0 0 0 .105.919A11.705 11.705 0 0 1 1.4.734a4.006 4.006 0 0 0 1.268 5.392 4.165 4.165 0 0 1-1.859-.5v.05A4.057 4.057 0 0 0 4.1 9.635a4.19 4.19 0 0 1-1.856.07 4.108 4.108 0 0 0 3.831 2.807A8.36 8.36 0 0 1 0 14.184 11.732 11.732 0 0 0 6.291 16 11.502 11.502 0 0 0 17.964 4.5c0-.177 0-.35-.012-.523A8.143 8.143 0 0 0 20 1.892Z" clip-rule="evenodd"/>
+            <a href="https://twitter.com/intent/tweet?url=https://animalgenerator.co&text=Check%20out%20this%20awesome%20Random%20Animal%20Generator!"
+                target="_blank" class="text-blue-500 hover:underline flex items-center">
+                <svg class="inline-block h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor" viewBox="0 0 20 17">
+                    <path fill-rule="evenodd"
+                        d="M20 1.892a8.178 8.178 0 0 1-2.355.635 4.074 4.074 0 0 0 1.8-2.235 8.344 8.344 0 0 1-2.605.98A4.13 4.13 0 0 0 13.85 0a4.068 4.068 0 0 0-4.1 4.038 4 4 0 0 0 .105.919A11.705 11.705 0 0 1 1.4.734a4.006 4.006 0 0 0 1.268 5.392 4.165 4.165 0 0 1-1.859-.5v.05A4.057 4.057 0 0 0 4.1 9.635a4.19 4.19 0 0 1-1.856.07 4.108 4.108 0 0 0 3.831 2.807A8.36 8.36 0 0 1 0 14.184 11.732 11.732 0 0 0 6.291 16 11.502 11.502 0 0 0 17.964 4.5c0-.177 0-.35-.012-.523A8.143 8.143 0 0 0 20 1.892Z"
+                        clip-rule="evenodd" />
                 </svg>
                 <span class="ml-2">Twitter</span>
             </a>
-    
+
             <!-- Pinterest Share -->
-            <a href="https://pinterest.com/pin/create/button/?url=https://animalgenerator.co&media=&description=Check%20out%20this%20awesome%20Random%20Animal%20Generator!" target="_blank" class="text-blue-500 hover:underline flex items-center">
-                <svg class="inline-block h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.477 0 10c0 4.418 2.865 8.166 6.839 9.489-.095-.806-.18-2.045.038-2.928.197-.84 1.268-5.348 1.268-5.348s-.323-.646-.323-1.6c0-1.5.87-2.623 1.953-2.623.92 0 1.365.69 1.365 1.518 0 .926-.59 2.31-.89 3.594-.253 1.07.537 1.942 1.59 1.942 1.908 0 3.38-2.01 3.38-4.9 0-2.56-1.84-4.35-4.47-4.35-3.05 0-4.84 2.29-4.84 4.65 0 .92.35 1.91.79 2.44.09.11.1.21.07.32-.08.35-.26 1.11-.3 1.27-.05.22-.16.27-.37.16-1.37-.64-2.23-2.65-2.23-4.27 0-3.48 2.53-6.68 7.3-6.68 3.83 0 6.8 2.73 6.8 6.38 0 3.8-2.39 6.86-5.7 6.86-1.11 0-2.15-.58-2.5-1.24l-.68 2.58c-.25.95-.93 2.13-1.39 2.85C8.5 19.8 9.24 20 10 20c5.523 0 10-4.477 10-10S15.523 0 10 0Z" clip-rule="evenodd"/>
+            <a href="https://pinterest.com/pin/create/button/?url=https://animalgenerator.co&media=&description=Check%20out%20this%20awesome%20Random%20Animal%20Generator!"
+                target="_blank" class="text-blue-500 hover:underline flex items-center">
+                <svg class="inline-block h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M10 0C4.477 0 0 4.477 0 10c0 4.418 2.865 8.166 6.839 9.489-.095-.806-.18-2.045.038-2.928.197-.84 1.268-5.348 1.268-5.348s-.323-.646-.323-1.6c0-1.5.87-2.623 1.953-2.623.92 0 1.365.69 1.365 1.518 0 .926-.59 2.31-.89 3.594-.253 1.07.537 1.942 1.59 1.942 1.908 0 3.38-2.01 3.38-4.9 0-2.56-1.84-4.35-4.47-4.35-3.05 0-4.84 2.29-4.84 4.65 0 .92.35 1.91.79 2.44.09.11.1.21.07.32-.08.35-.26 1.11-.3 1.27-.05.22-.16.27-.37.16-1.37-.64-2.23-2.65-2.23-4.27 0-3.48 2.53-6.68 7.3-6.68 3.83 0 6.8 2.73 6.8 6.38 0 3.8-2.39 6.86-5.7 6.86-1.11 0-2.15-.58-2.5-1.24l-.68 2.58c-.25.95-.93 2.13-1.39 2.85C8.5 19.8 9.24 20 10 20c5.523 0 10-4.477 10-10S15.523 0 10 0Z"
+                        clip-rule="evenodd" />
                 </svg>
                 <span class="ml-2">Pinterest</span>
             </a>
-    
+
             <!-- LinkedIn Share -->
-            <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://animalgenerator.co&title=Random%20Animal%20Generator" target="_blank" class="text-blue-500 hover:underline flex items-center">
-                <svg class="inline-block h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0zM7.12 20.45H3.56V9h3.56v11.45zM5.34 7.58c-1.14 0-2.06-.92-2.06-2.06s.92-2.06 2.06-2.06 2.06.92 2.06 2.06-.92 2.06-2.06 2.06zm15.11 12.87h-3.56v-5.6c0-1.34-.03-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96v5.7h-3.56V9h3.42v1.56h.05c.48-.9 1.66-1.85 3.42-1.85 3.66 0 4.34 2.41 4.34 5.54v6.2z"/>
+            <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://animalgenerator.co&title=Random%20Animal%20Generator"
+                target="_blank" class="text-blue-500 hover:underline flex items-center">
+                <svg class="inline-block h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0zM7.12 20.45H3.56V9h3.56v11.45zM5.34 7.58c-1.14 0-2.06-.92-2.06-2.06s.92-2.06 2.06-2.06 2.06.92 2.06 2.06-.92 2.06-2.06 2.06zm15.11 12.87h-3.56v-5.6c0-1.34-.03-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96v5.7h-3.56V9h3.42v1.56h.05c.48-.9 1.66-1.85 3.42-1.85 3.66 0 4.34 2.41 4.34 5.54v6.2z" />
                 </svg>
                 <span class="ml-2">LinkedIn</span>
             </a>
-    
+
             <!-- WhatsApp Share -->
-            <a href="https://api.whatsapp.com/send?text=Check%20out%20this%20awesome%20Random%20Animal%20Generator!%20https://animalgenerator.co" target="_blank" class="text-blue-500 hover:underline flex items-center">
-                <svg class="inline-block h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.477 0 10c0 1.77.46 3.43 1.26 4.89L0 20l5.11-1.26A9.96 9.96 0 0 0 10 20c5.523 0 10-4.477 10-10S15.523 0 10 0Zm4.84 14.84c-.2.56-1.16 1.06-1.6 1.12-.42.06-.96.08-1.54-.1-.36-.1-.82-.26-1.4-.5-2.46-1.06-4.06-3.54-4.18-3.7-.12-.16-1-1.34-1-2.56 0-1.22.62-1.82.84-2.06.22-.24.48-.3.64-.3.16 0 .32.01.46.02.14.01.36-.06.56.42.2.48.68 1.66.74 1.78.06.12.1.26.02.42-.08.16-.12.26-.24.4-.12.14-.26.32-.38.44-.12.12-.24.26-.1.5.14.24.62 1.02 1.34 1.66.92.82 1.7 1.08 1.94 1.2.24.12.38.1.52-.06.14-.16.6-.7.76-.94.16-.24.32-.2.54-.12.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.58-.14 1.14Z" clip-rule="evenodd"/>
+            <a href="https://api.whatsapp.com/send?text=Check%20out%20this%20awesome%20Random%20Animal%20Generator!%20https://animalgenerator.co"
+                target="_blank" class="text-blue-500 hover:underline flex items-center">
+                <svg class="inline-block h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M10 0C4.477 0 0 4.477 0 10c0 1.77.46 3.43 1.26 4.89L0 20l5.11-1.26A9.96 9.96 0 0 0 10 20c5.523 0 10-4.477 10-10S15.523 0 10 0Zm4.84 14.84c-.2.56-1.16 1.06-1.6 1.12-.42.06-.96.08-1.54-.1-.36-.1-.82-.26-1.4-.5-2.46-1.06-4.06-3.54-4.18-3.7-.12-.16-1-1.34-1-2.56 0-1.22.62-1.82.84-2.06.22-.24.48-.3.64-.3.16 0 .32.01.46.02.14.01.36-.06.56.42.2.48.68 1.66.74 1.78.06.12.1.26.02.42-.08.16-.12.26-.24.4-.12.14-.26.32-.38.44-.12.12-.24.26-.1.5.14.24.62 1.02 1.34 1.66.92.82 1.7 1.08 1.94 1.2.24.12.38.1.52-.06.14-.16.6-.7.76-.94.16-.24.32-.2.54-.12.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.58-.14 1.14Z"
+                        clip-rule="evenodd" />
                 </svg>
                 <span class="ml-2">WhatsApp</span>
             </a>
         </div>
     </section>
-    
+
     <!-- FAQ Section -->
-   <!-- Frequently Asked Questions -->
-<section class="mx-auto my-8 max-w-2xl text-left">
-    <h2 class="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
-    
-    <details open>
-      <summary class="font-medium text-lg cursor-pointer">How to Use the Random Animal Generator</summary>
-      <div class="mt-2 text-gray-700">
-        <p>1、Click Rondom button，Discover nature's diversity ， using our Random Animal Picture Generator.</p>
-        <p>2、To learn more about an animal, click or tap on it. A pop-up will appear with a brief paragraph from Wikipedia about the animal.</p>
-        <p>3、To copy the names of your animals, simply click the grey copy button. You can paste these names into any word processing program.</p>
-      </div>
-    </details>
-  
-    <details>
-      <summary class="font-medium text-lg cursor-pointer">Uses for the Random Animal Generator</summary>
-      <div class="mt-2 text-gray-700">
-        <p>The Random Animal Generator has many uses, including:</p>
-        <ul class="list-disc pl-4">
-          <li><strong>1、Teaching Children About Animals:</strong> If your child is just starting to learn about animals, there’s a lot of information to cover. Scientists estimate that there may be up to two million animal species on Earth. Where do you begin? Try using our animal generator. It can provide a few easy animals to start with, and the random element can be a fun way to keep children engaged.</li>
-          <li><strong>2、Playing Games:</strong> Similarly, our random animal generator can serve as the basis for a fun, biology-based guessing game. Generate a random animal for each player. Then, in a Charades-like game, ask players to act out their assigned animal. The goal is to get the other players to correctly guess what the animal is.</li>
-          <li><strong>3、Practicing Your English:</strong> As an adult, you probably know the names of all these animals, but do you know them in multiple languages? Using this tool can help reinforce your English language skills by generating random animals and working on memorizing their English names. Or challenge yourself to translate each animal name into the foreign language you are learning.</li>
-          <li><strong>4、Developing Artistic Skills:</strong> If you want to improve your drawing skills, this tool can be a great way to practice. Generate an animal, then challenge yourself to draw it. You can choose to mimic the provided image, create a cartoon version of the animal, or draw it in a different pose or setting.</li>
-          <li><strong>5、Practicing Knowledge of Scientific Classifications:</strong> For high school or college students who need to practice biological classifications, this tool can be very useful. Generate a few random animals and try to remember their classifications. You can vary the level of detail based on difficulty. Remembering the class of an animal might be relatively easy, but what about their genus or family?</li>
-          <li><strong>6、Practicing Scientific Names:</strong> If you are working on memorizing the scientific names of all the dinosaurs, set the tool to generate only dinosaurs. Then have the tool generate a random set. Challenge yourself to say the scientific name of the dinosaur before clicking on the image to get the full answer. This is essentially the same as using flashcards but saves you the effort of creating them.</li>
-        </ul>
-      </div>
-    </details>
-    <details>
-        <summary class="font-medium text-lg cursor-pointer">Why Recommend Random Animal Generator</summary>
-        <div class="mt-2 text-gray-700">
-          <p>Our website offers a diverse collection of high-quality animal images that are both adorable and entertaining. The random generation feature ensures that each visit is unique and engaging. We are constantly updating our site with new animal species and features, making it easy for everyone to discover amazing animal images.</p>
-          
-        </div>
-      </details>
-      <details>
-        <summary class="font-medium text-lg cursor-pointer">How Do We Generate Random Animal Images?
-        </summary>
-        <div class="mt-2 text-gray-700">
-          <p>Our website is powered by an extensive database of animal images. 
-            Each time a user clicks the 'Random Animal' button, our system randomly 
-            selects an image from this database to display. 
-            This automated process ensures that users receive a unique and surprising animal image with every click. 
-            We are dedicated to expanding our image database to keep the random selections fresh and exciting.</p>
-          
-        </div>
-      </details>
-  </section>
+    <!-- Frequently Asked Questions -->
+    <section class="mx-auto my-8 max-w-2xl text-left">
+        <h2 class="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
+
+        <details open>
+            <summary class="font-medium text-lg cursor-pointer">How to Use the random word generator?</summary>
+            <div class="mt-2 text-gray-700">
+                <p>1、Click Rondom button，you can also choose Category、Subcategory
+                    and input Number of Words to generate words,
+                    ，welcome to use our random word generator.</p>
+                <p>2、Click Copy button，To copy the word, You can paste the word into any word processing
+                    program.</p>
+
+
+
+            </div>
+        </details>
+        <br><br>
+        <details open>
+            <summary class="font-medium text-lg cursor-pointer">Uses for the random word generator</summary>
+            <div class="mt-2 text-gray-700">
+                <p>The Random Word Generator has many uses, including:</p>
+                <ul class="list-disc pl-4">
+                    <li><strong>1、Creative Writing Inspiration:</strong>
+                        Writers can use it to spark creativity and generate ideas for characters, settings, or plot points.
+
+                    </li>
+                     <li><strong>2、Educational Exercises:</strong>
+                        Teachers and students can use it for vocabulary building, spelling practice, or to create customized word lists for learning new languages.
+
+                    </li>
+                    <li><strong>3、Game Development::</strong>
+                        Game designers might use it to create random names for characters, places, or items within a game.
+                    </li>
+                    <li><strong>4、Learning and Memory Exercises:</strong>
+                        It can be used to create cards for learning and memorization exercises in various subjects.
+
+
+                    </li>
+                    <li><strong>5、Art Prompts:</strong>
+                        Artists can use random words as prompts to inspire new works, exploring the imagery and concepts behind the words.
+                    </li>
+                    <li><strong>6、Mind Mapping:</strong>
+                        During mind mapping exercises, a random word generator can provide a central theme to build ideas around
+                        .</li>
+                </ul>
+            </div>
+        </details>
+        <br><br>
+        <details open>
+            <summary class="font-medium text-lg cursor-pointer">Why Recommend random word generator?</summary>
+            <div class="mt-2 text-gray-700">
+                <p>Our website offers a free simple random word generator. The random generation feature ensures that
+                    each visit is unique and engaging. We are constantly updating our site with new tool, making it easy
+                    for everyone to generate random word.</p>
+
+            </div>
+        </details>
+        <br><br>
+        <details open>
+            <summary class="font-medium text-lg cursor-pointer">How Do We Generate random word?
+            </summary>
+            <div class="mt-2 text-gray-700">
+                <p>Using a Random Color Generator Function in Programming Language，
+                    it is so fun by using the function in the programming language, you can get a random word based on
+                    different team name</p>
+
+            </div>
+        </details>
+    </section>
 
 
     <footer class="bg-white dark:bg-gray-900">
         <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
             <div class="md:flex md:justify-between">
-              <div class="mb-6 md:mb-0">
-                  <a href="https://animalgenerator.co/" class="flex items-center">
-                      <img src="./icon.png"" class="h-8 me-3" alt="animal generator  Logo" />
-                      <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">animal generator</span>
-                  </a>
-              </div>
-              <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
-                  <div>
-                      <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Features</h2>
-                      <ul class="text-gray-500 dark:text-gray-400 font-medium">
-                          
-                          <li class="mb-2"><a href="./random-animal-wheel.html" class="hover:underline">Random Animal Wheel</a></li>
-                            <li class="mb-2"><a href="./random-animal-name.html" class="hover:underline">Random Animal Name</a></li>
-                            <li class="mb-2"><a href="./random-number-generator.html" class="hover:underline">Random Number Generator</a></li>
-                            <li class="mb-2"><a href="./random-name-generator.html" class="hover:underline">Random Name Generator</a></li>
-                            <li class="mb-2"><a href="./random-word-generator.html" class="hover:underline">Random Word Generator</a></li>
-                            <li class="mb-2"><a href="./random-password-generator.html" class="hover:underline">Random Password Generator</a></li>
-                            <li class="mb-2"><a href="./random-letter-generator.html" class="hover:underline">Random Letter Generator</a></li>
-                            <li class="mb-2"><a href="./random-team-generator.html" class="hover:underline">Random Team Generator</a></li>
-                            <li class="mb-2"><a href="./random-color-generator.html" class="hover:underline">Random Color Generator</a></li>
-      
-                      </ul>
-                  </div>
-                  <div>
-                      <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">OTHER PROJECTS</h2>
-                      <ul class="text-gray-500 dark:text-gray-400 font-medium">
-                          <li class="mb-2">
-                              <a href="https://tiktok-emojis.com" class="hover:underline ">TikTok Emojis</a>
-                          </li>
-                          <li class="mb-2">
-                              <a href="https://yesno.pro" class="hover:underline">Yes No Generator</a>
-                          </li>
-                          <li class="mb-2">
-                            <a href="https://upsidedowntext.vip" class="hover:underline">Upside Down Text</a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="https://shi300.com" class="hover:underline">POEM 300</a>
-                        </li>
-                      </ul>
-                  </div>
-                  <div>
-                      <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Company</h2>
-                      <ul class="text-gray-500 dark:text-gray-400 font-medium">
-                          <li class="mb-2">
-                              <a href="./privacy-policy.html" class="hover:underline">Privacy Policy</a>
-                          </li>
-                          <li class="mb-2">
-                            <a href="./terms-of-service.html" class="hover:underline">Terms of Service</a>
-                          </li>
-                          <li class="mb-2">
-                            <a href="./contact-us.html" class="hover:underline">Contact Us</a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="./about-us.html" class="hover:underline">About Us</a>
-                        </li>
-                      </ul>
-                  </div>
-              </div>
-          </div>
-          <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-          <div class="sm:flex sm:items-center sm:justify-between">
-              <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© Copyright 2024. All Rights Reserved.
-              </span>
-              <div class="flex space-x-5">
-                <!-- Facebook Share -->
-                <a href="https://www.facebook.com/sharer/sharer.php?u=https://animalgenerator.co" target="_blank" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 8 19">
-                        <path fill-rule="evenodd" d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z" clip-rule="evenodd"/>
-                    </svg>
-                    <span class="sr-only">Share on Facebook</span>
-                </a>
-            
-                <!-- Twitter Share -->
-                <a href="https://twitter.com/intent/tweet?url=https://animalgenerator.co&text=Check%20out%20this%20awesome%20Random%20Animal%20Generator!" target="_blank" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 17">
-                        <path fill-rule="evenodd" d="M20 1.892a8.178 8.178 0 0 1-2.355.635 4.074 4.074 0 0 0 1.8-2.235 8.344 8.344 0 0 1-2.605.98A4.13 4.13 0 0 0 13.85 0a4.068 4.068 0 0 0-4.1 4.038 4 4 0 0 0 .105.919A11.705 11.705 0 0 1 1.4.734a4.006 4.006 0 0 0 1.268 5.392 4.165 4.165 0 0 1-1.859-.5v.05A4.057 4.057 0 0 0 4.1 9.635a4.19 4.19 0 0 1-1.856.07 4.108 4.108 0 0 0 3.831 2.807A8.36 8.36 0 0 1 0 14.184 11.732 11.732 0 0 0 6.291 16 11.502 11.502 0 0 0 17.964 4.5c0-.177 0-.35-.012-.523A8.143 8.143 0 0 0 20 1.892Z" clip-rule="evenodd"/>
-                    </svg>
-                    <span class="sr-only">Share on Twitter</span>
-                </a>
-            
-                <!-- LinkedIn Share -->
-                <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://animalgenerator.co&title=Random%20Animal%20Generator" target="_blank" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0zM7.12 20.45H3.56V9h3.56v11.45zM5.34 7.58c-1.14 0-2.06-.92-2.06-2.06s.92-2.06 2.06-2.06 2.06.92 2.06 2.06-.92 2.06-2.06 2.06zm15.11 12.87h-3.56v-5.6c0-1.34-.03-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96v5.7h-3.56V9h3.42v1.56h.05c.48-.9 1.66-1.85 3.42-1.85 3.66 0 4.34 2.41 4.34 5.54v6.2z"/>
-                    </svg>
-                    <span class="sr-only">Share on LinkedIn</span>
-                </a>
-            
-                <!-- Pinterest Share -->
-                <a href="https://pinterest.com/pin/create/button/?url=https://animalgenerator.co&media=&description=Check%20out%20this%20awesome%20Random%20Animal%20Generator!" target="_blank" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.477 0 10c0 4.418 2.865 8.166 6.839 9.489-.095-.806-.18-2.045.038-2.928.197-.84 1.268-5.348 1.268-5.348s-.323-.646-.323-1.6c0-1.5.87-2.623 1.953-2.623.92 0 1.365.69 1.365 1.518 0 .926-.59 2.31-.89 3.594-.253 1.07.537 1.942 1.59 1.942 1.908 0 3.38-2.01 3.38-4.9 0-2.56-1.84-4.35-4.47-4.35-3.05 0-4.84 2.29-4.84 4.65 0 .92.35 1.91.79 2.44.09.11.1.21.07.32-.08.35-.26 1.11-.3 1.27-.05.22-.16.27-.37.16-1.37-.64-2.23-2.65-2.23-4.27 0-3.48 2.53-6.68 7.3-6.68 3.83 0 6.8 2.73 6.8 6.38 0 3.8-2.39 6.86-5.7 6.86-1.11 0-2.15-.58-2.5-1.24l-.68 2.58c-.25.95-.93 2.13-1.39 2.85C8.5 19.8 9.24 20 10 20c5.523 0 10-4.477 10-10S15.523 0 10 0Z" clip-rule="evenodd"/>
-                    </svg>
-                    <span class="sr-only">Share on Pinterest</span>
-                </a>
-            
-                <!-- WhatsApp Share -->
-                <a href="https://api.whatsapp.com/send?text=Check%20out%20this%20awesome%20Random%20Animal%20Generator!%20https://animalgenerator.co" target="_blank" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.477 0 10c0 1.77.46 3.43 1.26 4.89L0 20l5.11-1.26A9.96 9.96 0 0 0 10 20c5.523 0 10-4.477 10-10S15.523 0 10 0Zm4.84 14.84c-.2.56-1.16 1.06-1.6 1.12-.42.06-.96.08-1.54-.1-.36-.1-.82-.26-1.4-.5-2.46-1.06-4.06-3.54-4.18-3.7-.12-.16-1-1.34-1-2.56 0-1.22.62-1.82.84-2.06.22-.24.48-.3.64-.3.16 0 .32.01.46.02.14.01.36-.06.56.42.2.48.68 1.66.74 1.78.06.12.1.26.02.42-.08.16-.12.26-.24.4-.12.14-.26.32-.38.44-.12.12-.24.26-.1.5.14.24.62 1.02 1.34 1.66.92.82 1.7 1.08 1.94 1.2.24.12.38.1.52-.06.14-.16.6-.7.76-.94.16-.24.32-.2.54-.12.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.58-.14 1.14Z" clip-rule="evenodd"/>
-                    </svg>
-                    <span class="sr-only">Share on WhatsApp</span>
-                </a>
+                <div class="mb-6 md:mb-0">
+                    <a href="https://animalgenerator.co/" class="flex items-center">
+                        <img src="./icon.png"" class=" h-8 me-3" alt="animal generator  Logo" />
+                        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">animal
+                            generator</span>
+                    </a>
+                </div>
+                <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+                    <div>
+                        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Features</h2>
+                        <ul class="text-gray-500 dark:text-gray-400 font-medium">
+
+                            <li class="mb-2"><a href="./random-animal-wheel.html" class="hover:underline">Random Animal
+                                    Wheel</a></li>
+                            <li class="mb-2"><a href="./random-animal-name.html" class="hover:underline">Random Animal
+                                    Name</a></li>
+                            <li class="mb-2"><a href="./random-number-generator.html" class="hover:underline">Random
+                                    Number Generator</a></li>
+                            <li class="mb-2"><a href="./random-name-generator.html" class="hover:underline">Random Name
+                                    Generator</a></li>
+                            <li class="mb-2"><a href="./random-word-generator.html" class="hover:underline">Random Word
+                                    Generator</a></li>
+                            <li class="mb-2"><a href="./random-password-generator.html" class="hover:underline">Random
+                                    Password Generator</a></li>
+                            <li class="mb-2"><a href="./random-letter-generator.html" class="hover:underline">random
+                                    word generator</a></li>
+                            <li class="mb-2"><a href="./random-team-generator.html" class="hover:underline">random word
+                                    generator</a></li>
+                            <li class="mb-2"><a href="./random-color-generator.html" class="hover:underline">Random
+                                    Color Generator</a></li>
+
+                        </ul>
+                    </div>
+                    <div>
+                        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">OTHER PROJECTS
+                        </h2>
+                        <ul class="text-gray-500 dark:text-gray-400 font-medium">
+                            <li class="mb-2">
+                                <a href="https://tiktok-emojis.com" class="hover:underline ">TikTok Emojis</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://yesno.pro" class="hover:underline">Yes No Generator</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://upsidedowntext.vip" class="hover:underline">Upside Down Text</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://shi300.com" class="hover:underline">POEM 300</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Company</h2>
+                        <ul class="text-gray-500 dark:text-gray-400 font-medium">
+                            <li class="mb-2">
+                                <a href="./privacy-policy.html" class="hover:underline">Privacy Policy</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="./terms-of-service.html" class="hover:underline">Terms of Service</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="./contact-us.html" class="hover:underline">Contact Us</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="./about-us.html" class="hover:underline">About Us</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-          </div>
+            <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+            <div class="sm:flex sm:items-center sm:justify-between">
+                <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© Copyright 2024. All Rights
+                    Reserved.
+                </span>
+                <div class="flex space-x-5">
+                    <!-- Facebook Share -->
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://animalgenerator.co" target="_blank"
+                        class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                            viewBox="0 0 8 19">
+                            <path fill-rule="evenodd"
+                                d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span class="sr-only">Share on Facebook</span>
+                    </a>
+
+                    <!-- Twitter Share -->
+                    <a href="https://twitter.com/intent/tweet?url=https://animalgenerator.co&text=Check%20out%20this%20awesome%20Random%20Animal%20Generator!"
+                        target="_blank" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                            viewBox="0 0 20 17">
+                            <path fill-rule="evenodd"
+                                d="M20 1.892a8.178 8.178 0 0 1-2.355.635 4.074 4.074 0 0 0 1.8-2.235 8.344 8.344 0 0 1-2.605.98A4.13 4.13 0 0 0 13.85 0a4.068 4.068 0 0 0-4.1 4.038 4 4 0 0 0 .105.919A11.705 11.705 0 0 1 1.4.734a4.006 4.006 0 0 0 1.268 5.392 4.165 4.165 0 0 1-1.859-.5v.05A4.057 4.057 0 0 0 4.1 9.635a4.19 4.19 0 0 1-1.856.07 4.108 4.108 0 0 0 3.831 2.807A8.36 8.36 0 0 1 0 14.184 11.732 11.732 0 0 0 6.291 16 11.502 11.502 0 0 0 17.964 4.5c0-.177 0-.35-.012-.523A8.143 8.143 0 0 0 20 1.892Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span class="sr-only">Share on Twitter</span>
+                    </a>
+
+                    <!-- LinkedIn Share -->
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://animalgenerator.co&title=Random%20Animal%20Generator"
+                        target="_blank" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0zM7.12 20.45H3.56V9h3.56v11.45zM5.34 7.58c-1.14 0-2.06-.92-2.06-2.06s.92-2.06 2.06-2.06 2.06.92 2.06 2.06-.92 2.06-2.06 2.06zm15.11 12.87h-3.56v-5.6c0-1.34-.03-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96v5.7h-3.56V9h3.42v1.56h.05c.48-.9 1.66-1.85 3.42-1.85 3.66 0 4.34 2.41 4.34 5.54v6.2z" />
+                        </svg>
+                        <span class="sr-only">Share on LinkedIn</span>
+                    </a>
+
+                    <!-- Pinterest Share -->
+                    <a href="https://pinterest.com/pin/create/button/?url=https://animalgenerator.co&media=&description=Check%20out%20this%20awesome%20Random%20Animal%20Generator!"
+                        target="_blank" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                            viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 0C4.477 0 0 4.477 0 10c0 4.418 2.865 8.166 6.839 9.489-.095-.806-.18-2.045.038-2.928.197-.84 1.268-5.348 1.268-5.348s-.323-.646-.323-1.6c0-1.5.87-2.623 1.953-2.623.92 0 1.365.69 1.365 1.518 0 .926-.59 2.31-.89 3.594-.253 1.07.537 1.942 1.59 1.942 1.908 0 3.38-2.01 3.38-4.9 0-2.56-1.84-4.35-4.47-4.35-3.05 0-4.84 2.29-4.84 4.65 0 .92.35 1.91.79 2.44.09.11.1.21.07.32-.08.35-.26 1.11-.3 1.27-.05.22-.16.27-.37.16-1.37-.64-2.23-2.65-2.23-4.27 0-3.48 2.53-6.68 7.3-6.68 3.83 0 6.8 2.73 6.8 6.38 0 3.8-2.39 6.86-5.7 6.86-1.11 0-2.15-.58-2.5-1.24l-.68 2.58c-.25.95-.93 2.13-1.39 2.85C8.5 19.8 9.24 20 10 20c5.523 0 10-4.477 10-10S15.523 0 10 0Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span class="sr-only">Share on Pinterest</span>
+                    </a>
+
+                    <!-- WhatsApp Share -->
+                    <a href="https://api.whatsapp.com/send?text=Check%20out%20this%20awesome%20Random%20Animal%20Generator!%20https://animalgenerator.co"
+                        target="_blank" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                            viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 0C4.477 0 0 4.477 0 10c0 1.77.46 3.43 1.26 4.89L0 20l5.11-1.26A9.96 9.96 0 0 0 10 20c5.523 0 10-4.477 10-10S15.523 0 10 0Zm4.84 14.84c-.2.56-1.16 1.06-1.6 1.12-.42.06-.96.08-1.54-.1-.36-.1-.82-.26-1.4-.5-2.46-1.06-4.06-3.54-4.18-3.7-.12-.16-1-1.34-1-2.56 0-1.22.62-1.82.84-2.06.22-.24.48-.3.64-.3.16 0 .32.01.46.02.14.01.36-.06.56.42.2.48.68 1.66.74 1.78.06.12.1.26.02.42-.08.16-.12.26-.24.4-.12.14-.26.32-.38.44-.12.12-.24.26-.1.5.14.24.62 1.02 1.34 1.66.92.82 1.7 1.08 1.94 1.2.24.12.38.1.52-.06.14-.16.6-.7.76-.94.16-.24.32-.2.54-.12.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.58-.14 1.14Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span class="sr-only">Share on WhatsApp</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </footer>
-    
+
     <div style="display: none;">
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-S38X843KVL"></script>
